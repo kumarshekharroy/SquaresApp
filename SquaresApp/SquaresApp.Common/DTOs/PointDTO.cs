@@ -22,6 +22,9 @@ namespace SquaresApp.Common.DTOs
         /// </summary>
         /// <example>1</example> 
         public int Y { get; set; }
+
+
+        public int GetHashCode() => X ^ Y; 
          
     }
 }

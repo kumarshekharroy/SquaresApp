@@ -14,5 +14,6 @@ namespace SquaresApp.Common.DTOs
         /// </summary>
         /// <example>7</example>
         public long Id { get; set; }
+
     }
 }

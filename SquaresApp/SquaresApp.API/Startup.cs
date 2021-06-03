@@ -27,6 +27,8 @@ using System.Text;
 using Newtonsoft.Json;
 using System.Reflection;
 using Swashbuckle.AspNetCore.Filters;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 
 namespace SquaresApp.API
 {
@@ -46,6 +48,7 @@ namespace SquaresApp.API
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPointService, PointService>();
             services.AddScoped<IPointRepository, PointRepository>();
+            services.AddScoped<ISquaresService, SquaresService>();
 
             services.AddDbContext<SquaresAppDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString(ConstantValues.DbConnString)));
 
@@ -99,7 +102,7 @@ namespace SquaresApp.API
                     });
 
 
-            services.AddControllers(); 
+            services.AddControllers();
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
@@ -151,9 +154,9 @@ namespace SquaresApp.API
                 var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
 
-                 
+
                 c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>(); // Adds "(Auth)" to the summary so that you can see which endpoints have Authorization
-                 
+
             });
 
         }
@@ -163,8 +166,19 @@ namespace SquaresApp.API
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage(); 
+                app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler(c => c.Run(async context =>
+                            { 
+                                context.Response.StatusCode = StatusCodes.Status500InternalServerError; 
+                                var ex = context.Features.Get<IExceptionHandlerPathFeature>().Error;
+                                var response = new Response<object> { Message = ConstantValues.UnexpectedErrorMessage, Data = new { Error = new { Message = ex.InnerException?.Message ?? ex.Message, Type = ex.GetType().ToString() } } };
+                                await context.Response.WriteAsJsonAsync(response);
+                            }));
+            }
+
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();

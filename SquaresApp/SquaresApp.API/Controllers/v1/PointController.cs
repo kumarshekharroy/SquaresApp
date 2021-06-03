@@ -103,15 +103,11 @@ namespace SquaresApp.API.Controllers.v1
         /// Get all points.
         /// </summary>
         /// <remarks>
-        /// Provide unique coordinates for successful addition.
-        /// </remarks>
-        /// <param name="pointDTOs">It is a list of object consists of X and Y fields. </param> 
-        /// <returns>Returns HttpResponse with added points list on successful addition and error message when failed. </returns> 
-        /// <response code="200">Successfully added</response>
-        /// <response code="400">Validation failure</response> 
+        /// Returns list of all points
+        /// </remarks> 
+        /// <response code="200">Success</response> 
         [HttpGet("")]
-        [ProducesResponseType(typeof(Response<IEnumerable<GetPointDTO>>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(Response<string>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Response<IEnumerable<GetPointDTO>>), StatusCodes.Status200OK)] 
         public async Task<IActionResult> Get()
         { 
             var userId = User.GetUserId();
