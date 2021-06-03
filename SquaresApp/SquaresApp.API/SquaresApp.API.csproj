@@ -12,7 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\SquaresApp.Data\SquaresApp.Data.csproj" />
+    <ProjectReference Include="..\SquaresApp.Infra\SquaresApp.Infra.csproj" />
   </ItemGroup>
 
 </Project>
