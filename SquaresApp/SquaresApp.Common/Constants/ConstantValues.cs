@@ -25,6 +25,7 @@ namespace SquaresApp.Common.Constants
         public const string ProjectDescription = "Squares App API assignment";
         public const string Bearer = "Bearer";
         public const string JWT = "JWT";
+        public const string RedisConnString = "AppSettings:CacheConfig:RedisConfig:ConnString";
 
     }
 }

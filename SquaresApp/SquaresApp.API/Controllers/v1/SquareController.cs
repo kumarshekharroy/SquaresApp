@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Common.ExtentionMethods;
 using SquaresApp.Common.Models;
@@ -17,11 +18,10 @@ namespace SquaresApp.API.Controllers.v1
     [Authorize]
     public class SquareController : ControllerBase
     {
-        public readonly ISquaresService _squaresService;
+        private readonly ISquaresService _squaresService; 
         public SquareController(ISquaresService squaresService)
-        {
-
-            _squaresService = squaresService;
+        { 
+            _squaresService = squaresService; 
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace SquaresApp.API.Controllers.v1
         [ProducesResponseType(typeof(Response<IEnumerable<SquareDTO>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> Get()
         {
-            var userId = User.GetUserId();
+            var userId = User.GetUserId(); 
 
             var squareDTOs = await _squaresService.GetAllSquares(userId);
 

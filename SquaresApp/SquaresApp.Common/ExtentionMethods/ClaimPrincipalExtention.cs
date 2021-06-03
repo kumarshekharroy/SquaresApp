@@ -10,6 +10,11 @@ namespace SquaresApp.Common.ExtentionMethods
     {
         public static long GetUserId(this ClaimsPrincipal claimsPrincipal)
         {
+            if(!claimsPrincipal.Identity.IsAuthenticated)
+            {
+                return -1;
+            }
+
             if (claimsPrincipal.Identity is not ClaimsIdentity claimsIdentity)
             {
                 throw new InvalidOperationException("Invalid claims,");

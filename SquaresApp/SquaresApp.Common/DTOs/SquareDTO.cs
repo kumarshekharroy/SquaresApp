@@ -13,7 +13,7 @@ namespace SquaresApp.Common.DTOs
         public GetPointDTO C { get; set; }
         public GetPointDTO D { get; set; }
 
-        public int GetHashCode()
+        public override int GetHashCode()
         {
             return A?.GetHashCode() ^ B?.GetHashCode()^C?.GetHashCode() ^ D?.GetHashCode()??0;
         }

@@ -38,7 +38,7 @@ namespace SquaresApp.API.Controllers.v1
         /// <remarks>
         /// Provide unique username for successful registration.
         /// </remarks>
-        /// <param name="registerationPayload">It is an object consists of username and password fields. </param> 
+        /// <param name="userDTO">It is an object consists of username and password fields. </param> 
         /// <returns>Returns HttpResponse with registered user's detail on successful registration and error message when failed. </returns> 
         /// <response code="200">Registered</response>
         /// <response code="400">Validation failure</response> 
@@ -73,7 +73,7 @@ namespace SquaresApp.API.Controllers.v1
         /// <remarks>
         /// This endpoint returns a JWT token on successful authentication which can be used to access other secure endpoints.
         /// </remarks>
-        /// <param name="authPayload">It is an object consists of username,password. </param> 
+        /// <param name="userDTO">It is an object consists of username,password. </param> 
         /// <returns>Returns HttpResponse with a valid JWT on successful authentication and error message when failed. </returns> 
         /// <response code="200">Authentication Success</response>
         /// <response code="400">Validation failure</response> 

@@ -29,6 +29,7 @@ using System.Reflection;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using SquaresApp.API.Middlewares;
 
 namespace SquaresApp.API
 {
@@ -159,6 +160,25 @@ namespace SquaresApp.API
 
             });
 
+
+
+
+            var redisConnString = Configuration[ConstantValues.RedisConnString];
+            var redisInstanceName = $"{this.GetType().Namespace}-{Guid.NewGuid().ToString()}";
+
+            if (string.IsNullOrWhiteSpace(redisConnString))
+            {
+                services.AddDistributedMemoryCache();
+            }
+            else
+            {
+                services.AddStackExchangeRedisCache(options =>
+                {
+                    options.Configuration = redisConnString;
+                    options.InstanceName = redisInstanceName;
+                });
+            }
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -197,6 +217,8 @@ namespace SquaresApp.API
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            app.UseCustomCaching();
 
             app.UseEndpoints(endpoints =>
             {

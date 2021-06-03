@@ -24,7 +24,7 @@ namespace SquaresApp.Common.DTOs
         public int Y { get; set; }
 
 
-        public int GetHashCode() => X ^ Y; 
+        public override int GetHashCode() => X ^ Y; 
          
     }
 }
