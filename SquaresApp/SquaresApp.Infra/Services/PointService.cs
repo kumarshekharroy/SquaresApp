@@ -6,6 +6,7 @@ using SquaresApp.Domain.Models;
 using SquaresApp.Infra.IServices;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,6 +31,11 @@ namespace SquaresApp.Infra.Services
         /// <returns></returns>
         public async Task<(IEnumerable<GetPointDTO> getPointDTOs, string errorMessage)> AddAllPointsAsync(long userId, IEnumerable<PointDTO> pointDTOs)
         {
+            if (pointDTOs.Count()==0)
+            {
+                return (getPointDTOs: default, errorMessage: "No point supplied.");
+            }
+
             var points = _mapper.Map<IEnumerable<Point>>(pointDTOs, opt =>
             {
                 opt.Items[ConstantValues.UserId] = userId;

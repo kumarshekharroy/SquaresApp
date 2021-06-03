@@ -30,6 +30,7 @@ using Swashbuckle.AspNetCore.Filters;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using SquaresApp.API.Middlewares;
+using SquaresApp.Common.SwaggerUtils;
 
 namespace SquaresApp.API
 {
@@ -158,6 +159,9 @@ namespace SquaresApp.API
 
                 c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>(); // Adds "(Auth)" to the summary so that you can see which endpoints have Authorization
 
+
+                c.OperationFilter<FileUploadOperation>();
+
             });
 
 
@@ -183,23 +187,7 @@ namespace SquaresApp.API
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler(c => c.Run(async context =>
-                            { 
-                                context.Response.StatusCode = StatusCodes.Status500InternalServerError; 
-                                var ex = context.Features.Get<IExceptionHandlerPathFeature>().Error;
-                                var response = new Response<object> { Message = ConstantValues.UnexpectedErrorMessage, Data = new { Error = new { Message = ex.InnerException?.Message ?? ex.Message, Type = ex.GetType().ToString() } } };
-                                await context.Response.WriteAsJsonAsync(response);
-                            }));
-            }
-
-
+        { 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
@@ -219,6 +207,14 @@ namespace SquaresApp.API
             app.UseAuthorization();
 
             app.UseCustomCaching();
+             
+            app.UseExceptionHandler(c => c.Run(async context =>
+            {
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                var ex = context.Features.Get<IExceptionHandlerPathFeature>().Error;
+                var response = new Response<object> { Message = ConstantValues.UnexpectedErrorMessage, Data = new { Error = new { Message = ex.InnerException?.Message ?? ex.Message, Type = ex.GetType().ToString() } } }; 
+                await context.Response.WriteAsJsonAsync(response);
+            }));
 
             app.UseEndpoints(endpoints =>
             {

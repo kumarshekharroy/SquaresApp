@@ -32,7 +32,7 @@ namespace SquaresApp.Data.Repositories
         {
             var existingPoints = await _squaresAppDBContext.Points.Where(rec => rec.UserId == userId).ToArrayAsync();
 
-            var pointsTobeAdded = points.Except(existingPoints, new PointEqualityComparer());
+            var pointsTobeAdded = points.Distinct(new PointEqualityComparer()).Except(existingPoints, new PointEqualityComparer());
 
             if (pointsTobeAdded.Count() == 0)
             {

@@ -34,7 +34,7 @@ namespace SquaresApp.API.Middlewares
         public async Task InvokeAsync(HttpContext ctx)
         { 
             var userId = ctx.User.GetUserId(); 
-            var controllerName = ctx.GetEndpoint().Metadata.GetMetadata<ControllerActionDescriptor>().ControllerName;
+            var controllerName = ctx.GetEndpoint().Metadata.GetMetadata<ControllerActionDescriptor>()?.ControllerName;
 
             byte[] cachedValue = null;
             switch (controllerName)
@@ -79,10 +79,10 @@ namespace SquaresApp.API.Middlewares
 
                 await _next(ctx);
 
-
+                ctx.Response.Body.Seek(0, SeekOrigin.Begin);
                 if (ctx.Response.StatusCode == StatusCodes.Status200OK)
                 {
-                    ctx.Response.Body.Seek(0, SeekOrigin.Begin);
+                    
                     var buffer = new byte[Convert.ToInt32(ctx.Response.Body.Length)];
                     await ctx.Response.Body.ReadAsync(buffer, 0, buffer.Length);
                     ctx.Response.Body.Seek(0, SeekOrigin.Begin);
