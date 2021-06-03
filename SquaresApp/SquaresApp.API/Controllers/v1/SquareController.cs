@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SquaresApp.API.Controllers.v1
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
     public class SquareController : ControllerBase
@@ -25,7 +25,7 @@ namespace SquaresApp.API.Controllers.v1
         }
 
         /// <summary>
-        /// Get all points.
+        /// Get all squares.
         /// </summary>
         /// <remarks>
         /// Returns list of all points

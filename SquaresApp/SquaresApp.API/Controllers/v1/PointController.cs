@@ -83,8 +83,7 @@ namespace SquaresApp.API.Controllers.v1
         [ProducesResponseType(typeof(Response<string>), StatusCodes.Status400BadRequest)] 
         public async Task<IActionResult> Import([FromBody] IEnumerable<PointDTO> pointDTOs)
         {
-
-            throw new Exception("sshhss");
+             
             if (pointDTOs is null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, new Response<string> { Message = "Invalid payload." });

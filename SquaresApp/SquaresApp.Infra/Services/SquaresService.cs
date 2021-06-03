@@ -32,7 +32,7 @@ namespace SquaresApp.Infra.Services
         /// <returns></returns>
         public async Task<IEnumerable<SquareDTO>> GetAllSquares(long userId)
         {
-            var points = _mapper.Map<IEnumerable<GetPointDTO>>(await _pointRepository.GetAllPointsAsync(userId)).ToHashSet(new GetPointDTOEqualityComparer());
+            var points = _mapper.Map<IEnumerable<GetPointDTO>>(await _pointRepository.GetAllPointsAsync(userId)).ToHashSet(new GetPointDTOEqualityComparer()); //converted to hashset to ensure reduce lookup time.
 
             var squaresFound = new HashSet<SquareDTO>(new SquareDTOEqualityComparer());
 
@@ -45,11 +45,15 @@ namespace SquaresApp.Infra.Services
                         continue;
                     }
 
-                    var remainingPoints = PointHelper.GetRemainingPoints(a, c);
+                    var remainingPoints = PointHelper.GetRemainingPoints(a, c); // find coordinates of the expected 2nd diagonal of the square
 
-                    if (points.TryGetValue(remainingPoints.b, out var b) && points.TryGetValue(remainingPoints.d, out var d))
+                    if (points.TryGetValue(remainingPoints.b, out var b) && points.TryGetValue(remainingPoints.d, out var d)) 
                     {
-                        var allFourVerticesSortedWRTAngleWithXAxis = new GetPointDTO[] { a, b, c, d }.OrderBy(x => Math.Atan2(x.X, x.Y)).ToArray();
+                        var allFourVerticesSortedWRTAngleWithXAxis = new GetPointDTO[] { a, b, c, d }.Distinct(new GetPointDTOEqualityComparer()).OrderBy(x => Math.Atan2(x.X, x.Y)).ToArray(); // sort vertices of the square to filter out overlapping squares
+                        if (allFourVerticesSortedWRTAngleWithXAxis.Length != 4)
+                        {
+                            continue;
+                        }
 
                         var squareDTO = new SquareDTO { A = allFourVerticesSortedWRTAngleWithXAxis[0], B = allFourVerticesSortedWRTAngleWithXAxis[1], C = allFourVerticesSortedWRTAngleWithXAxis[2], D = allFourVerticesSortedWRTAngleWithXAxis[3] };
 

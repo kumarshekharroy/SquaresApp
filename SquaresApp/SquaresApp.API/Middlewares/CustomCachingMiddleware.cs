@@ -28,7 +28,7 @@ namespace SquaresApp.API.Middlewares
             _next = next;
             _cache = cache; 
 
-            distributedCacheEntryOption = new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(appSettings.CacheConfig.AbsoluteExpirationTimeInMin), SlidingExpiration = TimeSpan.FromMinutes(appSettings.CacheConfig.SlidingExpirationTimeInMin) };
+            distributedCacheEntryOption = new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = appSettings.CacheConfig.AbsoluteExpirationTimeInMin>0?TimeSpan.FromMinutes(appSettings.CacheConfig.AbsoluteExpirationTimeInMin):null, SlidingExpiration = appSettings.CacheConfig.SlidingExpirationTimeInMin>0?TimeSpan.FromMinutes(appSettings.CacheConfig.SlidingExpirationTimeInMin):null };
         }
 
         public async Task InvokeAsync(HttpContext ctx)

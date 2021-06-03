@@ -81,7 +81,7 @@ namespace SquaresApp.API.Controllers.v1
         [HttpPost("Login")]
         [ProducesResponseType(typeof(Response<string>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Response<string>), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(Response<string>), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Response<object>), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Login([FromBody] UserDTO userDTO)
         {
 

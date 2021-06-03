@@ -52,10 +52,10 @@ namespace SquaresApp.API
             services.AddScoped<IPointRepository, PointRepository>();
             services.AddScoped<ISquaresService, SquaresService>();
 
-            services.AddDbContext<SquaresAppDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString(ConstantValues.DbConnString))); 
+            services.AddDbContext<SquaresAppDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString(ConstantValues.DbConnString)));
             services.AddAutoMapper(config => config.AddProfile<AutoMapperProfiles>());
-              
-            services.Configure<AppSettings>(Configuration.GetSection(ConstantValues.AppSettings)).AddSingleton(resolver => resolver.GetRequiredService<IOptions<AppSettings>>().Value); 
+
+            services.Configure<AppSettings>(Configuration.GetSection(ConstantValues.AppSettings)).AddSingleton(resolver => resolver.GetRequiredService<IOptions<AppSettings>>().Value);
 
             services.AddAuthentication(options =>
             {
@@ -94,9 +94,13 @@ namespace SquaresApp.API
                             }
                         };
                     });
-             
-            services.AddControllers();
-             
+
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                options.JsonSerializerOptions.IgnoreNullValues = true;
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(ConstantValues.V1, new OpenApiInfo
@@ -145,12 +149,13 @@ namespace SquaresApp.API
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
-                 
+
                 c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>(); // Adds "(Auth)" to the summary so that you can see which endpoints have Authorization 
                 c.OperationFilter<FileUploadOperation>();
+                c.SchemaFilter<SwaggerSchemaFilter>();
 
             });
-             
+
             var redisConnString = Configuration[ConstantValues.RedisConnString];
             var redisInstanceName = $"{this.GetType().Namespace}-{Guid.NewGuid().ToString()}";
 
@@ -178,7 +183,7 @@ namespace SquaresApp.API
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {  
+        {
             app.UseSwagger().UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "SquaresApp.API v1");
@@ -190,18 +195,18 @@ namespace SquaresApp.API
             app.UseCors(ConstantValues.AllowAllOriginsCorsPolicy);
 
             app.UseRouting();
-             
+
             app.UseAuthentication();
 
             app.UseAuthorization();
 
             app.UseCustomCaching();
-             
+
             app.UseExceptionHandler(c => c.Run(async context =>
             {
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 var ex = context.Features.Get<IExceptionHandlerPathFeature>().Error;
-                var response = new Response<object> { Message = ConstantValues.UnexpectedErrorMessage, Data = new { Error = new { Message = ex.InnerException?.Message ?? ex.Message, Type = ex.GetType().ToString() } } }; 
+                var response = new Response<object> { Message = ConstantValues.UnexpectedErrorMessage, Data = new { Error = new { Message = ex.InnerException?.Message ?? ex.Message, Type = ex.GetType().ToString() } } };
                 await context.Response.WriteAsJsonAsync(response);
             }));
 
