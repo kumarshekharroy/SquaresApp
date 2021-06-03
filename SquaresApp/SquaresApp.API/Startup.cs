@@ -52,18 +52,10 @@ namespace SquaresApp.API
             services.AddScoped<IPointRepository, PointRepository>();
             services.AddScoped<ISquaresService, SquaresService>();
 
-            services.AddDbContext<SquaresAppDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString(ConstantValues.DbConnString)));
-
+            services.AddDbContext<SquaresAppDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString(ConstantValues.DbConnString))); 
             services.AddAutoMapper(config => config.AddProfile<AutoMapperProfiles>());
-
-
-            // Bind the configuration using IOptions
-            services.Configure<AppSettings>(Configuration.GetSection(ConstantValues.AppSettings));
-
-            // Explicitly register the settings object so IOptions not required (optional)
-            services.AddSingleton(resolver =>
-                resolver.GetRequiredService<IOptions<AppSettings>>().Value);
-
+              
+            services.Configure<AppSettings>(Configuration.GetSection(ConstantValues.AppSettings)).AddSingleton(resolver => resolver.GetRequiredService<IOptions<AppSettings>>().Value); 
 
             services.AddAuthentication(options =>
             {
@@ -102,11 +94,9 @@ namespace SquaresApp.API
                             }
                         };
                     });
-
-
+             
             services.AddControllers();
-
-            // Register the Swagger generator, defining 1 or more Swagger documents
+             
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(ConstantValues.V1, new OpenApiInfo
@@ -155,18 +145,12 @@ namespace SquaresApp.API
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
-
-
-                c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>(); // Adds "(Auth)" to the summary so that you can see which endpoints have Authorization
-
-
+                 
+                c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>(); // Adds "(Auth)" to the summary so that you can see which endpoints have Authorization 
                 c.OperationFilter<FileUploadOperation>();
 
             });
-
-
-
-
+             
             var redisConnString = Configuration[ConstantValues.RedisConnString];
             var redisInstanceName = $"{this.GetType().Namespace}-{Guid.NewGuid().ToString()}";
 
@@ -183,16 +167,19 @@ namespace SquaresApp.API
                 });
             }
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(ConstantValues.AllowAllOriginsCorsPolicy, builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        { 
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
-
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.) on specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
+        {  
+            app.UseSwagger().UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "SquaresApp.API v1");
                 c.RoutePrefix = string.Empty;
@@ -200,8 +187,10 @@ namespace SquaresApp.API
 
             app.UseHttpsRedirection();
 
-            app.UseRouting();
+            app.UseCors(ConstantValues.AllowAllOriginsCorsPolicy);
 
+            app.UseRouting();
+             
             app.UseAuthentication();
 
             app.UseAuthorization();
