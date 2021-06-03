@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using SquaresApp.Common.Constants;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Common.Models;
 using System;
@@ -24,7 +25,7 @@ namespace SquaresApp.Common.Helpers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(nameof(GetUserDTO.Id), getUserDTO.Id.ToString()),
+                    new Claim(ConstantValues.UserId, getUserDTO.Id.ToString()),
                     new Claim(nameof(GetUserDTO.Username), getUserDTO.Username), 
                 }),
 

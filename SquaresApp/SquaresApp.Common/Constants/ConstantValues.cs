@@ -18,6 +18,13 @@ namespace SquaresApp.Common.Constants
         public const string UnexpectedErrorMessage = "Some unexpected error occurred. Please try again after sometime with a valid payload.";
         public const string AllowAllOriginsCorsPolicy = "AllowAllOriginsCorsPolicy"; 
         public const string UnauthorizedRequestMessage = "Unauthorized request. A valid JWT token in Authorization header is expected.";
+        public const string UserId = "UserId";
+        public const string JSONContentType = "application/json";
+        public const string V1 = "v1";
+        public const string ProjectTitle = "Squares App API";
+        public const string ProjectDescription = "Squares App API assignment";
+        public const string Bearer = "Bearer";
+        public const string JWT = "JWT";
 
     }
 }

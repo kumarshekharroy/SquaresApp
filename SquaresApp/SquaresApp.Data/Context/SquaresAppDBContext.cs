@@ -21,6 +21,7 @@ namespace SquaresApp.Data.Context
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new UserConfiguration()); 
+            modelBuilder.ApplyConfiguration(new PointConfiguration()); 
 
         }
 

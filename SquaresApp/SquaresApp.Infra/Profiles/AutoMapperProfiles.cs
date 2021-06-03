@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SquaresApp.Common.Constants;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Domain.Models;
 using System;
@@ -12,7 +13,14 @@ namespace SquaresApp.Infra.Profiles
         public AutoMapperProfiles()
         {
             CreateMap<User, GetUserDTO>().ForMember(dto => dto.Password, opt => opt.UseDestinationValue());
-            CreateMap<UserDTO, User>(); 
+            CreateMap<UserDTO, User>();
+
+            CreateMap<Point, GetPointDTO>();
+            CreateMap<PointDTO, Point>().ForMember(d => d.UserId,
+                opt => opt.MapFrom(
+                    (src, dst, _, context) => context.Options.Items[ConstantValues.UserId]
+                )
+            );
         }
     }
 }
