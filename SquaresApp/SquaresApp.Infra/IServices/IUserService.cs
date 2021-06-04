@@ -21,12 +21,6 @@ namespace SquaresApp.Infra.IServices
         /// <param name="userDTO"></param>
         /// <returns></returns>
         Task<(GetUserDTO getUserDTO, string errorMessage)> AddUserAsync(UserDTO userDTO);
-
-        /// <summary>
-        /// check existance of a user by username
-        /// </summary>
-        /// <param name="username"></param>
-        /// <returns></returns>
-        Task<bool> CheckUserExistanceAsync(string username);
+         
     }
 }

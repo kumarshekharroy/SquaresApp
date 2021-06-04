@@ -69,7 +69,7 @@ namespace SquaresApp.API.Controllers.v1
 
 
         /// <summary>
-        /// Import new points.
+        /// Import new points from body.
         /// </summary>
         /// <remarks>
         /// Provide unique coordinates on successful addition.
@@ -121,7 +121,7 @@ namespace SquaresApp.API.Controllers.v1
         {
             var pointDTOs = new List<PointDTO>();
 
-            var file = Request.Form.Files[0];
+            var file = Request?.Form?.Files[0];
             if (file?.Length > 0)
             { 
                 using (var reader = new StreamReader(file.OpenReadStream()))
@@ -159,7 +159,7 @@ namespace SquaresApp.API.Controllers.v1
 
 
         /// <summary>
-        /// Get all points.
+        /// Get all existing points.
         /// </summary>
         /// <remarks>
         /// Returns list of all points
@@ -178,7 +178,7 @@ namespace SquaresApp.API.Controllers.v1
 
 
         /// <summary>
-        /// Delete a new point.
+        /// Delete an existing point.
         /// </summary>
         /// <remarks>
         /// Provide a valid point id for successful deletion.

@@ -58,7 +58,7 @@ namespace SquaresApp.Data.Repositories
         public async Task<(Point point, string errorMessage)> AddPointAsync(Point point)
         {
 
-            var pointExists = await _squaresAppDBContext.Points.AnyAsync(rec => rec.X == point.X && rec.Y == point.Y);
+            var pointExists = await _squaresAppDBContext.Points.AnyAsync(rec => rec.UserId == point.UserId && rec.X == point.X && rec.Y == point.Y);
 
             if (pointExists)
             {

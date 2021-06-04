@@ -28,7 +28,7 @@ namespace SquaresApp.Data.Repositories
         /// <returns></returns>
         public async Task<(User user, string errorMessage)> AddUserAsync(User user)
         {
-            var userExists = await CheckUserExistanceAsync(user.Username);
+            var userExists = await _squaresAppDBContext.Users.AnyAsync(x => x.Username.ToLower() == user.Username.ToLower());
             if (userExists)
             {
                 return (user: default, errorMessage: "Username already exists.");
@@ -44,17 +44,7 @@ namespace SquaresApp.Data.Repositories
             return (user: user, errorMessage: string.Empty);
         }
 
-
-        /// <summary>
-        /// check existance of a user by username
-        /// </summary>
-        /// <param name="username"></param>
-        /// <returns></returns>
-        public async Task<bool> CheckUserExistanceAsync(string username)
-        {
-            return await _squaresAppDBContext.Users.AnyAsync(x => x.Username.ToLower() == username.ToLower());
-        }
-
+         
 
         /// <summary>
         /// get user detail by username and hashedPassword

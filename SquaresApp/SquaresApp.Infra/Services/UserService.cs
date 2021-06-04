@@ -52,18 +52,7 @@ namespace SquaresApp.Infra.Services
 
             return (getUserDTO: getUserDTO, errorMessage: result.errorMessage); 
         }
-
-        /// <summary>
-        /// check existance of a user by username
-        /// </summary>
-        /// <param name="username"></param>
-        /// <returns></returns>
-        public async Task<bool> CheckUserExistanceAsync(string username)
-        {
-            return await _userRepository.CheckUserExistanceAsync(username);
-        }
-
-
+          
         /// <summary>
         /// get user detail by username and password
         /// </summary>

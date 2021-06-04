@@ -3,15 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquaresApp.API", "SquaresApp.API\SquaresApp.API.csproj", "{614E9E3F-5D36-40D7-8DE2-0CE948A6E436}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SquaresApp.API", "SquaresApp.API\SquaresApp.API.csproj", "{614E9E3F-5D36-40D7-8DE2-0CE948A6E436}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquaresApp.Infra", "SquaresApp.Infra\SquaresApp.Infra.csproj", "{86DA30C0-78AC-42EA-B17D-2993C4A4FF39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SquaresApp.Infra", "SquaresApp.Infra\SquaresApp.Infra.csproj", "{86DA30C0-78AC-42EA-B17D-2993C4A4FF39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquaresApp.Domain", "SquaresApp.Domain\SquaresApp.Domain.csproj", "{14CD2B5D-56B5-49FF-AFF2-4F4E1F5F187A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SquaresApp.Domain", "SquaresApp.Domain\SquaresApp.Domain.csproj", "{14CD2B5D-56B5-49FF-AFF2-4F4E1F5F187A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquaresApp.Data", "SquaresApp.Data\SquaresApp.Data.csproj", "{E4AD0E3C-7977-474D-BA2E-B050E88EE1B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SquaresApp.Data", "SquaresApp.Data\SquaresApp.Data.csproj", "{E4AD0E3C-7977-474D-BA2E-B050E88EE1B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquaresApp.Common", "SquaresApp.Common\SquaresApp.Common.csproj", "{CB2E4EB4-CCEC-4B9B-9C8D-E797702EC97C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SquaresApp.Common", "SquaresApp.Common\SquaresApp.Common.csproj", "{CB2E4EB4-CCEC-4B9B-9C8D-E797702EC97C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SquaresApp.Tests", "SquaresApp.Tests", "{54C0DA4D-A346-42D8-A0DC-6FC63A33F325}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquaresApp.API.Tests", "SquaresApp.API.Tests\SquaresApp.API.Tests.csproj", "{6D9592DA-17EE-4B3B-B6DC-C92905EFB92B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquaresApp.Infra.Tests", "SquaresApp.Infra.Tests\SquaresApp.Infra.Tests.csproj", "{939493F8-7E14-4B90-BD28-FD6FF52E8441}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquaresApp.Data.Tests", "SquaresApp.Data.Tests\SquaresApp.Data.Tests.csproj", "{3AEB75E5-4E3B-4012-A17E-202AF1607E76}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,9 +47,26 @@ Global
 		{CB2E4EB4-CCEC-4B9B-9C8D-E797702EC97C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB2E4EB4-CCEC-4B9B-9C8D-E797702EC97C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB2E4EB4-CCEC-4B9B-9C8D-E797702EC97C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D9592DA-17EE-4B3B-B6DC-C92905EFB92B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D9592DA-17EE-4B3B-B6DC-C92905EFB92B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D9592DA-17EE-4B3B-B6DC-C92905EFB92B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D9592DA-17EE-4B3B-B6DC-C92905EFB92B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{939493F8-7E14-4B90-BD28-FD6FF52E8441}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{939493F8-7E14-4B90-BD28-FD6FF52E8441}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{939493F8-7E14-4B90-BD28-FD6FF52E8441}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{939493F8-7E14-4B90-BD28-FD6FF52E8441}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AEB75E5-4E3B-4012-A17E-202AF1607E76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AEB75E5-4E3B-4012-A17E-202AF1607E76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AEB75E5-4E3B-4012-A17E-202AF1607E76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AEB75E5-4E3B-4012-A17E-202AF1607E76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6D9592DA-17EE-4B3B-B6DC-C92905EFB92B} = {54C0DA4D-A346-42D8-A0DC-6FC63A33F325}
+		{939493F8-7E14-4B90-BD28-FD6FF52E8441} = {54C0DA4D-A346-42D8-A0DC-6FC63A33F325}
+		{3AEB75E5-4E3B-4012-A17E-202AF1607E76} = {54C0DA4D-A346-42D8-A0DC-6FC63A33F325}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {529D7362-3AD9-4B5E-A44B-229FA246F926}

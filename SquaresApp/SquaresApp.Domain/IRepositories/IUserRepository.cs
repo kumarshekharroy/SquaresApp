@@ -22,12 +22,6 @@ namespace SquaresApp.Domain.IRepositories
         /// <param name="user"></param>
         /// <returns></returns>
         Task<(User user, string errorMessage)> AddUserAsync(User user);
-
-        /// <summary>
-        /// check existance of a user by username
-        /// </summary>
-        /// <param name="username"></param>
-        /// <returns></returns>
-        Task<bool> CheckUserExistanceAsync(string username);
+         
     }
 }
