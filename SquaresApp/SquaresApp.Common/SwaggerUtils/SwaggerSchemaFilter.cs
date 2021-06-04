@@ -39,8 +39,7 @@ namespace SquaresApp.Common.SwaggerUtils
                 },
                 nameof(GetUserDTO) => new OpenApiObject
                 {
-                    [nameof(GetUserDTO.Username)] = new OpenApiString("Admin"),
-                    [nameof(GetUserDTO.Password)] = new OpenApiString("Admin"),
+                    [nameof(GetUserDTO.Username)] = new OpenApiString("Admin"), 
                     [nameof(GetUserDTO.Id)] = new OpenApiLong(_rand.Next(5)),
                 },
                 nameof(SquareDTO) => new OpenApiObject

@@ -12,7 +12,7 @@ namespace SquaresApp.Infra.Profiles
     {
         public AutoMapperProfiles()
         {
-            CreateMap<User, GetUserDTO>().ForMember(dto => dto.Password, opt => opt.UseDestinationValue());
+            CreateMap<User, GetUserDTO>().ForMember(dto => dto.Password, opt => opt.Ignore());
             CreateMap<UserDTO, User>();
 
             CreateMap<Point, GetPointDTO>();

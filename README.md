@@ -1,6 +1,6 @@
 # Squares App : .Net Core Web API Application
  
- This is a simple but performant layered web API application which enable its user/consumer to find out sets of points that make squares and how many squares can be drawn with the given set of points.
+ This is a simple layered web API application which enable its user/consumer to find out sets of points that make squares and how many squares can be drawn with the given set of points.
  User can import a list of points, delete a point from an existing list, retrieve all the stored points and the squares identified using exposed REST endpoints.
  JWT bearer token is being used for authentication and authorization of request. 
  It is currently using MSSQL server as database but can easily be changed to any other popular relational database of choice by changing few lines of code in startup.cs file.
@@ -16,7 +16,7 @@
 
 4. Create A Folder/Directory on local machine. Open Git bash/cmd prompt/powershell and navigate to the directory using `cd {dirname}` command.
 
-5. Clone this github repository in the folder/dir by running : git clone https://github.com/kumarshekharroy/SquaresApp.git command.
+5. Clone this github repository in the folder/dir by running : `git clone https://github.com/kumarshekharroy/SquaresApp.git command.
 
 6. Navigate to SquaresApp/SquaresApp/SquaresApp.API  folader/dir by running `cd SquaresApp/SquaresApp/SquaresApp.API` command.
 
