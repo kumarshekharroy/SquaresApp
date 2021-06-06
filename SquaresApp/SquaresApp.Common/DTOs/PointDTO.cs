@@ -15,16 +15,16 @@ namespace SquaresApp.Common.DTOs
         /// X coordinate of the Point
         /// </summary>
         /// <example>-1</example> 
-        public int X { get; set; }
+        public float X { get; set; }
 
         /// <summary>
         /// Y coordinate of the Point
         /// </summary>
         /// <example>1</example> 
-        public int Y { get; set; }
+        public float Y { get; set; }
 
 
-        public override int GetHashCode() => X ^ Y; 
+        public override int GetHashCode() => X.GetHashCode() ^ Y.GetHashCode(); 
          
     }
 }

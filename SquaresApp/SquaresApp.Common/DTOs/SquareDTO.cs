@@ -15,7 +15,7 @@ namespace SquaresApp.Common.DTOs
 
         public override int GetHashCode()
         {
-            return A?.GetHashCode() ^ B?.GetHashCode()^C?.GetHashCode() ^ D?.GetHashCode()??0;
+            return A?.GetHashCode() ^ B?.GetHashCode() ^ C?.GetHashCode() ^ D?.GetHashCode() ?? 0;
         }
     }
 }

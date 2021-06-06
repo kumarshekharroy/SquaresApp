@@ -1,4 +1,5 @@
 ﻿using Moq;
+using SquaresApp.Common.Constants;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Domain.IRepositories;
 using SquaresApp.Domain.Models;
@@ -62,9 +63,15 @@ namespace SquaresApp.Infra.Tests
 
             //Arrange    
             var pointDTO = new PointDTO() { X = 1, Y = 2 };
+
+            var point = _mapper.Map<Point>(pointDTO,opt =>
+            {
+                opt.Items[ConstantValues.UserId] = _userId;
+            }); 
+
             var expectedResult = (new GetPointDTO { Id = 1, X = pointDTO.X, Y = pointDTO.Y }, string.Empty);
 
-            _mockedPointrRepository.Setup(obj => obj.AddPointAsync(It.IsAny<Point>())).ReturnsAsync((new Point { UserId = _userId, X = pointDTO.X, Y = pointDTO.Y }, expectedResult.Item2)).Verifiable();
+            _mockedPointrRepository.Setup(obj => obj.AddPointAsync(It.IsAny<Point>())).ReturnsAsync((point, expectedResult.Item2)).Verifiable();
 
             var pointService = new PointService(_mapper, _mockedPointrRepository.Object);
 

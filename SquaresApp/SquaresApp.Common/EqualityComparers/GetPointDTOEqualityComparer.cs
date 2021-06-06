@@ -28,7 +28,7 @@ namespace SquaresApp.Common.EqualityComparers
 
         public int GetHashCode(GetPointDTO obj)
         {
-            return $"{obj.X}{obj.Y}".GetHashCode();
+            return obj.X.GetHashCode() ^ obj.Y.GetHashCode(); 
         }
     }
 }
