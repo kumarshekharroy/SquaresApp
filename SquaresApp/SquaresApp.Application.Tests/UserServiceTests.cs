@@ -1,18 +1,17 @@
 using Moq;
+using SquaresApp.Application.Services;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Common.Helpers;
 using SquaresApp.Domain.IRepositories;
 using SquaresApp.Domain.Models;
-using SquaresApp.Infra.Services;
-using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace SquaresApp.Infra.Tests
+namespace SquaresApp.Application.Tests
 {
-    public class UserServiceTests: ServiceBase
+    public class UserServiceTests : ServiceBase
     {
-        private readonly Mock<IUserRepository> _mockedUserRepository ;
+        private readonly Mock<IUserRepository> _mockedUserRepository;
         public UserServiceTests()
         {
             _mockedUserRepository = new Mock<IUserRepository>();
@@ -57,7 +56,7 @@ namespace SquaresApp.Infra.Tests
         {
 
             //Arrange   
-            var userDTO = new UserDTO() { Username  = StringHelper.GenerateRandomString(length: 10) ,Password=default};
+            var userDTO = new UserDTO() { Username = StringHelper.GenerateRandomString(length: 10), Password = default };
             var expectedResult = (default(GetUserDTO), "Invalid password.");
 
             _mockedUserRepository.Setup(obj => obj.AddUserAsync(It.IsAny<User>())).ReturnsAsync((default(User), string.Empty)).Verifiable();
@@ -116,9 +115,9 @@ namespace SquaresApp.Infra.Tests
 
             //Arrange   
             var userDTO = new UserDTO() { Username = StringHelper.GenerateRandomString(length: 10), Password = StringHelper.GenerateRandomString(length: 10) };
-            var expectedResult = (new GetUserDTO { Id=1,Username=userDTO.Username }, string.Empty);
+            var expectedResult = (new GetUserDTO { Id = 1, Username = userDTO.Username }, string.Empty);
 
-            _mockedUserRepository.Setup(obj => obj.AddUserAsync(It.IsAny<User>())).ReturnsAsync((new User { Id=expectedResult.Item1.Id,Username=expectedResult.Item1.Username}, expectedResult.Item2)).Verifiable();
+            _mockedUserRepository.Setup(obj => obj.AddUserAsync(It.IsAny<User>())).ReturnsAsync((new User { Id = expectedResult.Item1.Id, Username = expectedResult.Item1.Username }, expectedResult.Item2)).Verifiable();
 
             var userService = new UserService(_mockedUserRepository.Object, _mapper);
 
@@ -153,7 +152,7 @@ namespace SquaresApp.Infra.Tests
             var userDTO = new UserDTO() { Username = default, Password = StringHelper.GenerateRandomString(length: 10) };
             var expectedResult = (default(GetUserDTO), "Invalid username.");
 
-            _mockedUserRepository.Setup(obj => obj.GetUserAsync(It.IsAny<string>(),It.IsAny<string>())).ReturnsAsync((default(User), string.Empty)).Verifiable();
+            _mockedUserRepository.Setup(obj => obj.GetUserAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((default(User), string.Empty)).Verifiable();
 
             var userService = new UserService(_mockedUserRepository.Object, _mapper);
 
@@ -163,7 +162,7 @@ namespace SquaresApp.Infra.Tests
 
 
             //Assert   
-            _mockedUserRepository.Verify(obj => obj.GetUserAsync(It.IsAny<string>(),It.IsAny<string>()), Times.Never());
+            _mockedUserRepository.Verify(obj => obj.GetUserAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
             Assert.Null(result.getUserDTO);
             Assert.NotNull(result.errorMessage);
             Assert.Equal(result.errorMessage, expectedResult.Item2);

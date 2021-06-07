@@ -1,7 +1,4 @@
 ﻿using SquaresApp.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SquaresApp.Domain.IRepositories
@@ -15,13 +12,13 @@ namespace SquaresApp.Domain.IRepositories
         /// <param name="hashedPassword"></param>
         /// <returns></returns>
         Task<(User user, string errorMessage)> GetUserAsync(string username, string hashedPassword);
- 
+
         /// <summary>
         /// create / add a new user
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
         Task<(User user, string errorMessage)> AddUserAsync(User user);
-         
+
     }
 }

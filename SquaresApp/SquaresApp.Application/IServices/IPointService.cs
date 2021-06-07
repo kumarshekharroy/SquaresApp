@@ -1,10 +1,8 @@
 ﻿using SquaresApp.Common.DTOs;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace SquaresApp.Infra.IServices
+namespace SquaresApp.Application.IServices
 {
     public interface IPointService
     {

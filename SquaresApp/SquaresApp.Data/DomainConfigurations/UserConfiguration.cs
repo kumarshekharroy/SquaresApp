@@ -2,9 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SquaresApp.Common.ExtentionMethods;
 using SquaresApp.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SquaresApp.Data.DomainConfigurations
 {

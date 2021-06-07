@@ -3,16 +3,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using SquaresApp.API.Controllers.v1;
+using SquaresApp.Application.IServices;
+using SquaresApp.Application.Profiles;
 using SquaresApp.Common.Constants;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Common.Helpers;
 using SquaresApp.Common.Models;
-using SquaresApp.Infra.IServices;
-using SquaresApp.Infra.Profiles;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -222,7 +218,7 @@ namespace SquaresApp.API.Tests
             //Arrange    
             var payload = new UserDTO() { Username = StringHelper.GenerateRandomString(length: 10), Password = StringHelper.GenerateRandomString(length: 10) };
             var returnData = (new GetUserDTO { Id = 1, Username = StringHelper.GenerateRandomString(length: 10) }, string.Empty);
-            const string expectedMessage= "Authentication successful.";
+            const string expectedMessage = "Authentication successful.";
             _mockedUserService.Setup(obj => obj.GetUserAsync(It.IsAny<UserDTO>())).ReturnsAsync(returnData).Verifiable();
             var userController = new UserController(_mockedUserService.Object, _appSettings, _mapper);
 

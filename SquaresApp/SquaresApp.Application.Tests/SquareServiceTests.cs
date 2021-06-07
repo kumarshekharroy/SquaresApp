@@ -1,18 +1,16 @@
 ﻿using Moq;
+using SquaresApp.Application.Services;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Domain.IRepositories;
 using SquaresApp.Domain.Models;
-using SquaresApp.Infra.Services;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace SquaresApp.Infra.Tests
+namespace SquaresApp.Application.Tests
 {
-    public class SquareServiceTests: ServiceBase
+    public class SquareServiceTests : ServiceBase
     {
         private readonly Mock<IPointRepository> _mockedPointrRepository;
         private const long _userId = 1;

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SquaresApp.Common.DTOs
+﻿namespace SquaresApp.Common.DTOs
 {
     /// <summary>
     /// Point's detail DTO
@@ -17,3 +13,4 @@ namespace SquaresApp.Common.DTOs
 
     }
 }
+

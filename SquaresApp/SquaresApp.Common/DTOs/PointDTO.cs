@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace SquaresApp.Common.DTOs
+﻿namespace SquaresApp.Common.DTOs
 {
     /// <summary>
     /// Point's detail DTO
@@ -24,7 +19,7 @@ namespace SquaresApp.Common.DTOs
         public float Y { get; set; }
 
 
-        public override int GetHashCode() => X.GetHashCode() ^ Y.GetHashCode(); 
-         
+        public override int GetHashCode() => X.GetHashCode() ^ Y.GetHashCode();
+
     }
 }

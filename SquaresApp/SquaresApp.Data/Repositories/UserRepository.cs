@@ -1,12 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SquaresApp.Common.Constants;
-using SquaresApp.Common.ExtentionMethods;
 using SquaresApp.Data.Context;
 using SquaresApp.Domain.IRepositories;
 using SquaresApp.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SquaresApp.Data.Repositories
@@ -33,7 +29,7 @@ namespace SquaresApp.Data.Repositories
             {
                 return (user: default, errorMessage: "Username already exists.");
             }
-             
+
             await _squaresAppDBContext.Users.AddAsync(user);
 
             if (await _squaresAppDBContext.SaveChangesAsync() == 0)
@@ -44,7 +40,7 @@ namespace SquaresApp.Data.Repositories
             return (user: user, errorMessage: string.Empty);
         }
 
-         
+
 
         /// <summary>
         /// get user detail by username and hashedPassword
@@ -55,7 +51,7 @@ namespace SquaresApp.Data.Repositories
         public async Task<(User user, string errorMessage)> GetUserAsync(string username, string hashedPassword)
         {
             var user = await _squaresAppDBContext.Users.FirstOrDefaultAsync(x => x.Username.ToLower() == username.ToLower() && x.Password == hashedPassword);
-            
+
             if (user is null)
             {
                 return (user: default, errorMessage: "Username and password combination is incorrect.");
@@ -63,6 +59,6 @@ namespace SquaresApp.Data.Repositories
 
             return (user: user, errorMessage: string.Empty);
         }
-         
+
     }
 }

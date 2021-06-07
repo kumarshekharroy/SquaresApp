@@ -2,15 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SquaresApp.Application.IServices;
 using SquaresApp.Common.Constants;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Common.Helpers;
 using SquaresApp.Common.Models;
-using SquaresApp.Infra.IServices;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SquaresApp.API.Controllers.v1
@@ -104,7 +100,7 @@ namespace SquaresApp.API.Controllers.v1
 
             var jwtToken = JWTHelper.GenerateJWTToken(result.getUserDTO, _appSettings.JWTConfig);
 
-            return StatusCode(StatusCodes.Status200OK, new Response<string> { IsSuccess = true, Message = "Authentication successful.", Data = jwtToken }); 
+            return StatusCode(StatusCodes.Status200OK, new Response<string> { IsSuccess = true, Message = "Authentication successful.", Data = jwtToken });
 
         }
 

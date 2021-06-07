@@ -4,10 +4,8 @@ using SquaresApp.Data.Context;
 using SquaresApp.Domain.EqualityComparers;
 using SquaresApp.Domain.IRepositories;
 using SquaresApp.Domain.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SquaresApp.Data.Repositories

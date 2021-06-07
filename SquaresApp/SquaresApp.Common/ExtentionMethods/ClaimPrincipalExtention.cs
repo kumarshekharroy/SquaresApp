@@ -1,8 +1,6 @@
 ﻿using SquaresApp.Common.Constants;
 using System;
-using System.Collections.Generic;
 using System.Security.Claims;
-using System.Text;
 
 namespace SquaresApp.Common.ExtentionMethods
 {
@@ -10,7 +8,7 @@ namespace SquaresApp.Common.ExtentionMethods
     {
         public static long GetUserId(this ClaimsPrincipal claimsPrincipal)
         {
-            if(!claimsPrincipal.Identity.IsAuthenticated)
+            if (!claimsPrincipal.Identity.IsAuthenticated)
             {
                 return -1;
             }

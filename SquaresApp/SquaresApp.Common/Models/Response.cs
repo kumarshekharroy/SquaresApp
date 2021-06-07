@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SquaresApp.Common.Models
+﻿namespace SquaresApp.Common.Models
 {
     /// <summary>
     /// Generic Response type for all API responses

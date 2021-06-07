@@ -1,10 +1,5 @@
-using Microsoft.EntityFrameworkCore;
-using SquaresApp.Common.ExtentionMethods;
-using SquaresApp.Common.Helpers;
-using SquaresApp.Data.Context;
 using SquaresApp.Data.Repositories;
 using SquaresApp.Domain.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -82,7 +77,7 @@ namespace SquaresApp.Data.Tests
 
 
             //Act
-            var result = await pointRepository.DeletePointAsync(userId,pointId);
+            var result = await pointRepository.DeletePointAsync(userId, pointId);
 
 
             //Assert    
@@ -136,8 +131,8 @@ namespace SquaresApp.Data.Tests
 
             //Assert    
             Assert.NotNull(result);
-            Assert.IsAssignableFrom<IEnumerable<Point>>(result); 
-            Assert.True(result.Count()>0);
+            Assert.IsAssignableFrom<IEnumerable<Point>>(result);
+            Assert.True(result.Count() > 0);
         }
 
         /// <summary>
@@ -156,7 +151,7 @@ namespace SquaresApp.Data.Tests
 
 
             //Act
-            var result = await pointRepository.AddAllPointsAsync(userId,points);
+            var result = await pointRepository.AddAllPointsAsync(userId, points);
 
 
             //Assert    
@@ -164,7 +159,7 @@ namespace SquaresApp.Data.Tests
             Assert.NotEmpty(result.errorMessage);
             Assert.Equal(result.errorMessage, expectedMessage);
         }
-         
+
         /// <summary>
         /// AddAllPoint Test Success
         /// </summary>
@@ -181,15 +176,15 @@ namespace SquaresApp.Data.Tests
 
 
             //Act
-            var result = await pointRepository.AddAllPointsAsync(userId,points);
+            var result = await pointRepository.AddAllPointsAsync(userId, points);
 
 
             //Assert    
             Assert.NotNull(result.points);
-            Assert.True(result.points.Count()>0);
+            Assert.True(result.points.Count() > 0);
             Assert.Empty(result.errorMessage);
             Assert.Equal(result.errorMessage, expectedMessage);
         }
-         
+
     }
 }

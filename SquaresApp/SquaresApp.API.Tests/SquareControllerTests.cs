@@ -2,16 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using SquaresApp.API.Controllers.v1;
-using SquaresApp.Common.Constants;
+using SquaresApp.Application.IServices;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Common.Models;
-using SquaresApp.Infra.IServices;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -37,7 +31,7 @@ namespace SquaresApp.API.Tests
             var returnData = new SquareDTO[] { };
             const string expectedMessage = "Successfully identified.";
             _mockedSquaresService.Setup(obj => obj.GetAllSquares(It.IsAny<long>())).ReturnsAsync(returnData).Verifiable();
-            
+
             var squareController = new SquareController(_mockedSquaresService.Object);
             squareController.ControllerContext = _controllerContext;
 

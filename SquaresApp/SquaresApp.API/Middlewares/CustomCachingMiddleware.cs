@@ -1,15 +1,12 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Caching.Distributed;
 using SquaresApp.Common.Constants;
 using SquaresApp.Common.ExtentionMethods;
 using SquaresApp.Common.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace SquaresApp.API.Middlewares
@@ -37,7 +34,7 @@ namespace SquaresApp.API.Middlewares
 
             //var controllerName = ctx.GetEndpoint()?.Metadata?.GetMetadata<ControllerActionDescriptor>()?.ControllerName; //
             var controllerName = ctx.Request.Path.ToString().Split('/', StringSplitOptions.RemoveEmptyEntries).Skip(2).FirstOrDefault()?.ToLower().Trim(); // Path e.g /api/v1/Point/... 
-             
+
             var cachedValue = await GetCachedResponseAsync(ctx, userId, controllerName);
 
             if (cachedValue is not null) //cache hit successful. So, no need to hit action method. 
@@ -109,7 +106,7 @@ namespace SquaresApp.API.Middlewares
 
         private async Task<byte[]> GetCachedResponseAsync(HttpContext ctx, long userId, string controllerName)
         {
-            byte[] cachedValue=default(byte[]);
+            byte[] cachedValue = default(byte[]);
             switch (controllerName)
             {
                 case "point":

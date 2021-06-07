@@ -1,18 +1,14 @@
-using Microsoft.EntityFrameworkCore;
 using SquaresApp.Common.ExtentionMethods;
 using SquaresApp.Common.Helpers;
-using SquaresApp.Data.Context;
 using SquaresApp.Data.Repositories;
 using SquaresApp.Domain.Models;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace SquaresApp.Data.Tests
 {
-    public class UserRepositoryTests: RepositoryBase
-    { 
+    public class UserRepositoryTests : RepositoryBase
+    {
         /// <summary>
         /// AddUser Test For Duplicate username
         /// </summary>
@@ -20,7 +16,7 @@ namespace SquaresApp.Data.Tests
         [Fact]
         public async Task AddUser_UserAlreadyExist()
         {
-             
+
             //Arrange   
             var user = new User() { Username = "Username", Password = StringHelper.GenerateRandomString(length: 10) };
             var expectedMessage = "Username already exists.";
@@ -34,8 +30,8 @@ namespace SquaresApp.Data.Tests
 
             //Assert    
             Assert.Null(result.user);
-            Assert.NotEmpty(result.errorMessage); 
-            Assert.Equal(result.errorMessage, expectedMessage); 
+            Assert.NotEmpty(result.errorMessage);
+            Assert.Equal(result.errorMessage, expectedMessage);
         }
 
         /// <summary>
@@ -45,9 +41,9 @@ namespace SquaresApp.Data.Tests
         [Fact]
         public async Task AddUser_Successful()
         {
-             
+
             //Arrange   
-            var user = new User() { Username = StringHelper.GenerateRandomString(length: 10), Password = StringHelper.GenerateRandomString(length: 10)};
+            var user = new User() { Username = StringHelper.GenerateRandomString(length: 10), Password = StringHelper.GenerateRandomString(length: 10) };
 
 
             var userRepository = new UserRepository(_squaresAppDBContext);
@@ -59,7 +55,7 @@ namespace SquaresApp.Data.Tests
 
             //Assert    
             Assert.NotNull(result.user);
-            Assert.Empty(result.errorMessage); 
+            Assert.Empty(result.errorMessage);
         }
 
         /// <summary>
@@ -78,7 +74,7 @@ namespace SquaresApp.Data.Tests
 
 
             //Act
-            var result = await userRepository.GetUserAsync(user.Username,user.Password);
+            var result = await userRepository.GetUserAsync(user.Username, user.Password);
 
 
             //Assert    
@@ -96,19 +92,19 @@ namespace SquaresApp.Data.Tests
         {
 
             //Arrange   
-            var user = new User() { Username ="Username", Password = "123Abc".ToSHA256() };
+            var user = new User() { Username = "Username", Password = "123Abc".ToSHA256() };
 
 
             var userRepository = new UserRepository(_squaresAppDBContext);
 
 
             //Act
-            var result = await userRepository.GetUserAsync(user.Username,user.Password);
+            var result = await userRepository.GetUserAsync(user.Username, user.Password);
 
 
             //Assert    
             Assert.NotNull(result.user);
-            Assert.Equal(result.user.Username,user.Username);
+            Assert.Equal(result.user.Username, user.Username);
             Assert.Empty(result.errorMessage);
         }
     }

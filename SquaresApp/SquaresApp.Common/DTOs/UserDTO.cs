@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace SquaresApp.Common.DTOs
+﻿namespace SquaresApp.Common.DTOs
 {
     /// <summary>
     /// User's detail DTO

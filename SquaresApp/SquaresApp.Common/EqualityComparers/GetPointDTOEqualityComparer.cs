@@ -1,13 +1,9 @@
 ﻿using SquaresApp.Common.DTOs;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SquaresApp.Common.EqualityComparers
 {
-     
+
     public sealed class GetPointDTOEqualityComparer : IEqualityComparer<GetPointDTO>
     {
         public bool Equals(GetPointDTO a, GetPointDTO b)
@@ -28,7 +24,7 @@ namespace SquaresApp.Common.EqualityComparers
 
         public int GetHashCode(GetPointDTO obj)
         {
-            return obj.X.GetHashCode() ^ obj.Y.GetHashCode(); 
+            return obj.X.GetHashCode() ^ obj.Y.GetHashCode();
         }
     }
 }

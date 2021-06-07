@@ -1,18 +1,15 @@
 ﻿using AutoMapper;
+using SquaresApp.Application.IServices;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Common.EqualityComparers;
 using SquaresApp.Common.Helpers;
-using SquaresApp.Domain.EqualityComparers;
 using SquaresApp.Domain.IRepositories;
-using SquaresApp.Domain.Models;
-using SquaresApp.Infra.IServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace SquaresApp.Infra.Services
+namespace SquaresApp.Application.Services
 {
     public class SquaresService : ISquaresService
     {
@@ -45,7 +42,7 @@ namespace SquaresApp.Infra.Services
             for (int i = 0; i < points.Length; i++)
             {
                 for (int j = i + 1; j < points.Length; j++) // started from i+1 cuz line connecting points A and B will be same as Line connnecting points B and A. i.e. Line AB == Line BA.
-                { 
+                {
                     var a = points[i];
                     var c = points[j];
 

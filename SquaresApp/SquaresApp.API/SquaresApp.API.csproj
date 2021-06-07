@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SquaresApp.Data\SquaresApp.Data.csproj" />
-    <ProjectReference Include="..\SquaresApp.Infra\SquaresApp.Infra.csproj" />
+    <ProjectReference Include="..\SquaresApp.Application\SquaresApp.Application.csproj" />
   </ItemGroup>
 
 </Project>

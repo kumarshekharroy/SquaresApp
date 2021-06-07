@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SquaresApp.Domain.Models
+﻿namespace SquaresApp.Domain.Models
 {
     public class Point
     {

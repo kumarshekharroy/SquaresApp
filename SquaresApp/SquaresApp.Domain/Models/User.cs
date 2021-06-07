@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace SquaresApp.Domain.Models
 {
@@ -10,6 +8,6 @@ namespace SquaresApp.Domain.Models
         public string Username { get; set; }
         public string Password { get; set; }
 
-        public virtual ICollection<Point> Points { get; set; } 
+        public virtual ICollection<Point> Points { get; set; }
     }
 }

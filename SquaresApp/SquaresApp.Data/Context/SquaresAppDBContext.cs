@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SquaresApp.Data.DomainConfigurations;
 using SquaresApp.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SquaresApp.Data.Context
 {
@@ -20,8 +17,8 @@ namespace SquaresApp.Data.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfiguration(new UserConfiguration()); 
-            modelBuilder.ApplyConfiguration(new PointConfiguration()); 
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new PointConfiguration());
 
         }
 

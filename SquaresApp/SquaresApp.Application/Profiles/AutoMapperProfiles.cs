@@ -2,11 +2,8 @@
 using SquaresApp.Common.Constants;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace SquaresApp.Infra.Profiles
+namespace SquaresApp.Application.Profiles
 {
     public class AutoMapperProfiles : Profile
     {

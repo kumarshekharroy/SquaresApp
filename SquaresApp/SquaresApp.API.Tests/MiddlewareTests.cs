@@ -2,18 +2,12 @@
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
-using Moq;
 using SquaresApp.API.Middlewares;
 using SquaresApp.Common.Constants;
 using SquaresApp.Common.Models;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -39,7 +33,7 @@ namespace SquaresApp.API.Tests
 
             var cacheConfig = new CacheConfig { AbsoluteExpirationTimeInMin = 2, SlidingExpirationTimeInMin = 1 };
             _appSettings = new AppSettings { CacheConfig = cacheConfig };
-             
+
             var opts = Options.Create<MemoryDistributedCacheOptions>(new MemoryDistributedCacheOptions());
             _distributedCache = new MemoryDistributedCache(opts);
         }
@@ -113,7 +107,7 @@ namespace SquaresApp.API.Tests
             var cachedData = await distributedCache.GetStringAsync(cacheKey);
 
             //Assert    
-            Assert.Null(cachedData); 
+            Assert.Null(cachedData);
 
         }
 
@@ -185,7 +179,7 @@ namespace SquaresApp.API.Tests
             var cachedData = await _distributedCache.GetStringAsync(cacheKey);
 
             //Assert    
-            Assert.Null(cachedData); 
+            Assert.Null(cachedData);
         }
 
         /// <summary>
@@ -278,10 +272,10 @@ namespace SquaresApp.API.Tests
 
             //Assert    
             Assert.NotNull(getPointsCacheData);
-            Assert.Equal(getPointsCacheData,existingGetPointsCacheData);
+            Assert.Equal(getPointsCacheData, existingGetPointsCacheData);
             Assert.NotNull(getSquaresCacheData);
-            Assert.Equal(getSquaresCacheData,existingGetSquaresCacheData);
-            Assert.Null(deletedPointCacheData); 
+            Assert.Equal(getSquaresCacheData, existingGetSquaresCacheData);
+            Assert.Null(deletedPointCacheData);
 
         }
 

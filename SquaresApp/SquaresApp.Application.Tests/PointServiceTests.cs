@@ -1,17 +1,15 @@
 ﻿using Moq;
+using SquaresApp.Application.Services;
 using SquaresApp.Common.Constants;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Domain.IRepositories;
 using SquaresApp.Domain.Models;
-using SquaresApp.Infra.Services;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace SquaresApp.Infra.Tests
+namespace SquaresApp.Application.Tests
 {
     public class PointServiceTests : ServiceBase
     {
@@ -64,10 +62,10 @@ namespace SquaresApp.Infra.Tests
             //Arrange    
             var pointDTO = new PointDTO() { X = 1, Y = 2 };
 
-            var point = _mapper.Map<Point>(pointDTO,opt =>
-            {
-                opt.Items[ConstantValues.UserId] = _userId;
-            }); 
+            var point = _mapper.Map<Point>(pointDTO, opt =>
+             {
+                 opt.Items[ConstantValues.UserId] = _userId;
+             });
 
             var expectedResult = (new GetPointDTO { Id = 1, X = pointDTO.X, Y = pointDTO.Y }, string.Empty);
 
@@ -254,7 +252,7 @@ namespace SquaresApp.Infra.Tests
             //Assert   
             _mockedPointrRepository.Verify(obj => obj.AddPointAsync(It.IsAny<Point>()), Times.Never());
             Assert.NotNull(result.getPointDTOs);
-            Assert.True(result.getPointDTOs.Count()>0);
+            Assert.True(result.getPointDTOs.Count() > 0);
             Assert.Empty(result.errorMessage);
             Assert.Equal(result.errorMessage, expectedResult.Item2);
 

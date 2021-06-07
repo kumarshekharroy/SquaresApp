@@ -3,7 +3,6 @@ using SquaresApp.Common.Constants;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Common.Models;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -26,7 +25,7 @@ namespace SquaresApp.Common.Helpers
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ConstantValues.UserId, getUserDTO.Id.ToString()),
-                    new Claim(nameof(GetUserDTO.Username), getUserDTO.Username), 
+                    new Claim(nameof(GetUserDTO.Username), getUserDTO.Username),
                 }),
 
                 //Not Before : Cannot be used before given Time --To Prevent BruitForce Attack by Bot

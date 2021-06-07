@@ -1,21 +1,14 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SquaresApp.Common.Constants;
+using SquaresApp.Application.IServices;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Common.ExtentionMethods;
-using SquaresApp.Common.Helpers;
 using SquaresApp.Common.Models;
 using SquaresApp.Common.SwaggerUtils;
-using SquaresApp.Domain.Models;
-using SquaresApp.Infra.IServices;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SquaresApp.API.Controllers.v1
@@ -80,10 +73,10 @@ namespace SquaresApp.API.Controllers.v1
         /// <response code="400">Validation failure</response> 
         [HttpPost("ImportFromBody")]
         [ProducesResponseType(typeof(Response<IEnumerable<GetPointDTO>>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(Response<string>), StatusCodes.Status400BadRequest)] 
+        [ProducesResponseType(typeof(Response<string>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Import([FromBody] IEnumerable<PointDTO> pointDTOs)
         {
-             
+
             if (pointDTOs is null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, new Response<string> { Message = "Invalid payload." });
@@ -123,25 +116,25 @@ namespace SquaresApp.API.Controllers.v1
 
             var file = Request?.Form?.Files[0];
             if (file?.Length > 0)
-            { 
+            {
                 using (var reader = new StreamReader(file.OpenReadStream()))
                 {
                     while (reader.Peek() >= 0)
                     {
-                        var csv = reader.ReadLine().Replace("\"",string.Empty).Split(",");
+                        var csv = reader.ReadLine().Replace("\"", string.Empty).Split(",");
 
                         if (csv.Count() == 2 && int.TryParse(csv[0], out var x) && int.TryParse(csv[1], out var y))
                         {
                             pointDTOs.Add(new PointDTO { X = x, Y = y });
                         }
                     }
-                } 
+                }
             }
             else
             {
                 return StatusCode(StatusCodes.Status400BadRequest, new Response<string> { Message = "Invalid file." });
             }
-             
+
 
             var userId = User.GetUserId();
 

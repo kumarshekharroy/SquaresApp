@@ -1,15 +1,12 @@
 ﻿using AutoMapper;
+using SquaresApp.Application.IServices;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Common.ExtentionMethods;
 using SquaresApp.Domain.IRepositories;
 using SquaresApp.Domain.Models;
-using SquaresApp.Infra.IServices;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace SquaresApp.Infra.Services
+namespace SquaresApp.Application.Services
 {
     public class UserService : IUserService
     {
@@ -50,9 +47,9 @@ namespace SquaresApp.Infra.Services
 
             var getUserDTO = string.IsNullOrWhiteSpace(result.errorMessage) ? _mapper.Map<GetUserDTO>(result.user) : default;
 
-            return (getUserDTO: getUserDTO, errorMessage: result.errorMessage); 
+            return (getUserDTO: getUserDTO, errorMessage: result.errorMessage);
         }
-          
+
         /// <summary>
         /// get user detail by username and password
         /// </summary>

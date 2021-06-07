@@ -1,16 +1,14 @@
 ﻿using AutoMapper;
+using SquaresApp.Application.IServices;
 using SquaresApp.Common.Constants;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Domain.IRepositories;
 using SquaresApp.Domain.Models;
-using SquaresApp.Infra.IServices;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace SquaresApp.Infra.Services
+namespace SquaresApp.Application.Services
 {
     public class PointService : IPointService
     {
@@ -31,7 +29,7 @@ namespace SquaresApp.Infra.Services
         /// <returns></returns>
         public async Task<(IEnumerable<GetPointDTO> getPointDTOs, string errorMessage)> AddAllPointsAsync(long userId, IEnumerable<PointDTO> pointDTOs)
         {
-            if (pointDTOs.Count()==0)
+            if (pointDTOs.Count() == 0)
             {
                 return (getPointDTOs: default, errorMessage: "No point supplied.");
             }

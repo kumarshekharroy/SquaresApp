@@ -3,8 +3,6 @@ using Microsoft.OpenApi.Models;
 using SquaresApp.Common.DTOs;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
-using System.Collections.Generic;
-using System.Linq; 
 
 namespace SquaresApp.Common.SwaggerUtils
 {
@@ -20,14 +18,14 @@ namespace SquaresApp.Common.SwaggerUtils
         public void Apply(OpenApiSchema schema, SchemaFilterContext context)
         {
             schema.Example = context.Type.Name switch
-            { 
+            {
                 nameof(PointDTO) => new OpenApiObject
-                {  
+                {
                     [nameof(PointDTO.X)] = new OpenApiLong(_rand.Next(10)),
                     [nameof(PointDTO.Y)] = new OpenApiLong(_rand.Next(10)),
                 },
                 nameof(GetPointDTO) => new OpenApiObject
-                { 
+                {
                     [nameof(GetPointDTO.Id)] = new OpenApiLong(_rand.Next(5)),
                     [nameof(GetPointDTO.X)] = new OpenApiLong(_rand.Next(10)),
                     [nameof(GetPointDTO.Y)] = new OpenApiLong(_rand.Next(10)),
@@ -35,11 +33,11 @@ namespace SquaresApp.Common.SwaggerUtils
                 nameof(UserDTO) => new OpenApiObject
                 {
                     [nameof(UserDTO.Username)] = new OpenApiString("Admin"),
-                    [nameof(UserDTO.Password)] = new OpenApiString("Admin"), 
+                    [nameof(UserDTO.Password)] = new OpenApiString("Admin"),
                 },
                 nameof(GetUserDTO) => new OpenApiObject
                 {
-                    [nameof(GetUserDTO.Username)] = new OpenApiString("Admin"), 
+                    [nameof(GetUserDTO.Username)] = new OpenApiString("Admin"),
                     [nameof(GetUserDTO.Id)] = new OpenApiLong(_rand.Next(5)),
                 },
                 nameof(SquareDTO) => new OpenApiObject
@@ -68,7 +66,7 @@ namespace SquaresApp.Common.SwaggerUtils
                         [nameof(GetPointDTO.X)] = new OpenApiLong(_rand.Next(10)),
                         [nameof(GetPointDTO.Y)] = new OpenApiLong(_rand.Next(10)),
                     },
-                }, 
+                },
                 _ => default
             };
 

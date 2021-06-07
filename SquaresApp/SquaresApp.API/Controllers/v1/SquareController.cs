@@ -5,7 +5,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Common.ExtentionMethods;
 using SquaresApp.Common.Models;
-using SquaresApp.Infra.IServices;
+using SquaresApp.Application.IServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
