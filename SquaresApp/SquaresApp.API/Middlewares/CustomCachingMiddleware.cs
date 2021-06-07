@@ -106,7 +106,7 @@ namespace SquaresApp.API.Middlewares
 
         private async Task<byte[]> GetCachedResponseAsync(HttpContext ctx, long userId, string controllerName)
         {
-            byte[] cachedValue = default(byte[]);
+            var cachedValue = default(byte[]);
             switch (controllerName)
             {
                 case "point":
@@ -138,11 +138,7 @@ namespace SquaresApp.API.Middlewares
             return cachedValue;
         }
     }
-
-
-
-
-
+     
     public static class CustomCachingMiddlewareExt
     {
         /// <summary>

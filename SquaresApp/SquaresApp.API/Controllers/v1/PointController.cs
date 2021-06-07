@@ -23,8 +23,7 @@ namespace SquaresApp.API.Controllers.v1
         public PointController(IPointService pointService)
         {
             _pointService = pointService;
-        }
-
+        } 
 
         /// <summary>
         /// Add a new point.
@@ -60,7 +59,6 @@ namespace SquaresApp.API.Controllers.v1
 
         }
 
-
         /// <summary>
         /// Import new points from body.
         /// </summary>
@@ -95,7 +93,6 @@ namespace SquaresApp.API.Controllers.v1
             return StatusCode(StatusCodes.Status400BadRequest, new Response<string> { Message = result.errorMessage });
 
         }
-
 
         /// <summary>
         /// Import new points from CSV file.
@@ -133,14 +130,12 @@ namespace SquaresApp.API.Controllers.v1
             else
             {
                 return StatusCode(StatusCodes.Status400BadRequest, new Response<string> { Message = "Invalid file." });
-            }
-
+            } 
 
             var userId = User.GetUserId();
 
             var result = await _pointService.AddAllPointsAsync(userId, pointDTOs);
-
-
+             
             if (string.IsNullOrWhiteSpace(result.errorMessage))
             {
                 return StatusCode(StatusCodes.Status200OK, new Response<IEnumerable<GetPointDTO>> { IsSuccess = true, Message = "Successfully imported.", Data = result.getPointDTOs });
@@ -149,7 +144,6 @@ namespace SquaresApp.API.Controllers.v1
             return StatusCode(StatusCodes.Status400BadRequest, new Response<string> { Message = result.errorMessage });
 
         }
-
 
         /// <summary>
         /// Get all existing points.
@@ -168,7 +162,6 @@ namespace SquaresApp.API.Controllers.v1
 
             return StatusCode(StatusCodes.Status200OK, new Response<IEnumerable<GetPointDTO>> { IsSuccess = true, Message = "Successfully fetched.", Data = getPointDTOs });
         }
-
 
         /// <summary>
         /// Delete an existing point.

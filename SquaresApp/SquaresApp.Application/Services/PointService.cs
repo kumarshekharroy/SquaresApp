@@ -29,7 +29,7 @@ namespace SquaresApp.Application.Services
         /// <returns></returns>
         public async Task<(IEnumerable<GetPointDTO> getPointDTOs, string errorMessage)> AddAllPointsAsync(long userId, IEnumerable<PointDTO> pointDTOs)
         {
-            if (pointDTOs.Count() == 0)
+            if (!pointDTOs.Any())
             {
                 return (getPointDTOs: default, errorMessage: "No point supplied.");
             }
@@ -77,7 +77,6 @@ namespace SquaresApp.Application.Services
             return (getPointDTO: getPointDTO, errorMessage: result.errorMessage);
 
         }
-
 
         /// <summary>
         /// delete a point from existing list of points

@@ -25,7 +25,7 @@
 
 7. Execute `dotnet run` commnad to run the application. (It will fetch all the required dependencies and build the project automatically).
 
-8. Connection string for database can be changed from `appsettings.json` file.
+8. Connection string for database can be changed from `appsettings.{Development/Production}.json` file.
 
 9. The migrations are already created. So, There is no need to create the same manually. The application will automatically apply those migrations on first run.
 
@@ -36,7 +36,7 @@
 
 1. Seed data for User and Points are included in the migration. So, The migration will by default create two users `User_1: {username:"Admin",password:"Admin"}, User_2: {username:"User",password:"User"}` and their respective few records in Points table.
  
-2. TTL of JWT tokens (fresh) and JWT signing key/secret can be changed from `appsettings.json` file.
+2. TTL of JWT tokens (fresh) and JWT signing key/secret can be changed from `appsettings.{Development/Production}.json` file.
 
 3. All the layers of the project are Unit tested by using `Xunit` framework.
 
@@ -50,6 +50,8 @@
 
 8. `Custom Distributed(using redis)/InMemory(as fallback to distributed)` caching is implemented to improve  performance, scalability and lower the response time. 
 
-9. `SlidingExpirationTime` and `AbsoluteExpirationTime` for the cache can be changed from `Cache` section of `appsettings.json` file. Set these values to `0` to disable caching.
+9. `SlidingExpirationTime` and `AbsoluteExpirationTime` for the cache can be changed from `CacheConfig` section of `appsettings.{Development/Production}.json` file. Set these values to `0` to disable caching.
 
-10. To make the caching distributed set a valid Redis connection string in `ConnString` field present in the `RedisConfig` section of `appsettings.json` file. Leave the field empty/blank to switch to InMemory caching.
+10. To make the caching distributed set a valid Redis connection string in `ConnString` field present in the `RedisConfig` section of `appsettings.{Development/Production}.json` file. Leave the field empty/blank to continue with InMemory caching.
+
+11. `/Point/ImportFromCSV` endpoint expect points in csv file format. A sample CSV file (`points-import-sample.csv`) for the same has been included in the root of the repository. 

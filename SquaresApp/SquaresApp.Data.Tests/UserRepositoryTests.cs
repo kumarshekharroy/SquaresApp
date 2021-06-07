@@ -2,6 +2,7 @@ using SquaresApp.Common.ExtentionMethods;
 using SquaresApp.Common.Helpers;
 using SquaresApp.Data.Repositories;
 using SquaresApp.Domain.Models;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -51,10 +52,13 @@ namespace SquaresApp.Data.Tests
 
             //Act
             var result = await userRepository.AddUserAsync(user);
-
+            var userInDB = _squaresAppDBContext.Users.FirstOrDefault(x => x.Username == user.Username);
 
             //Assert    
             Assert.NotNull(result.user);
+            Assert.NotNull(userInDB);
+            Assert.True(result.user.Id>0);
+            Assert.Equal(user.Username, userInDB.Username);
             Assert.Empty(result.errorMessage);
         }
 

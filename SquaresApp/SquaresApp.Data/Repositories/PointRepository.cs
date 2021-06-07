@@ -32,7 +32,7 @@ namespace SquaresApp.Data.Repositories
 
             var pointsTobeAdded = points.Distinct(new PointEqualityComparer()).Except(existingPoints, new PointEqualityComparer());
 
-            if (pointsTobeAdded.Count() == 0)
+            if (!pointsTobeAdded.Any())
             {
                 return (points: default, errorMessage: "Points already exist.");
             }

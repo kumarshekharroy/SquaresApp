@@ -12,8 +12,7 @@ namespace SquaresApp.Application.IServices
         /// <param name="userID"></param> 
         /// <param name="pointDTO"></param> 
         /// <returns></returns>
-        Task<(GetPointDTO getPointDTO, string errorMessage)> AddPointAsync(long userId, PointDTO pointDTO);
-
+        Task<(GetPointDTO getPointDTO, string errorMessage)> AddPointAsync(long userId, PointDTO pointDTO); 
 
         /// <summary>
         /// delete a point from existing list of points
@@ -28,8 +27,7 @@ namespace SquaresApp.Application.IServices
         /// </summary>
         /// <param name="userID"></param>  
         /// <returns></returns>
-        Task<IEnumerable<GetPointDTO>> GetAllPointsAsync(long userId);
-
+        Task<IEnumerable<GetPointDTO>> GetAllPointsAsync(long userId); 
 
         /// <summary>
         /// add all points

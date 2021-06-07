@@ -27,7 +27,6 @@ namespace SquaresApp.API.Controllers.v1
             _mapper = mapper;
         }
 
-
         /// <summary>
         /// Register a new user.
         /// </summary>
@@ -61,7 +60,6 @@ namespace SquaresApp.API.Controllers.v1
             return StatusCode(StatusCodes.Status400BadRequest, new Response<string> { Message = result.errorMessage });
 
         }
-
 
         /// <summary>
         /// Get JWT token

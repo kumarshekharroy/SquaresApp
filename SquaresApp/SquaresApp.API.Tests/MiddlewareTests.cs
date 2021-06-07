@@ -28,8 +28,7 @@ namespace SquaresApp.API.Tests
             fakeIdentity.AddClaim(new Claim(ConstantValues.UserId, UserId));
             var principal = new GenericPrincipal(fakeIdentity, null);
 
-            _defaultHttpContext = new DefaultHttpContext();
-            _defaultHttpContext.User = principal;
+            _defaultHttpContext = new DefaultHttpContext() { User=principal};  
 
             var cacheConfig = new CacheConfig { AbsoluteExpirationTimeInMin = 2, SlidingExpirationTimeInMin = 1 };
             _appSettings = new AppSettings { CacheConfig = cacheConfig };

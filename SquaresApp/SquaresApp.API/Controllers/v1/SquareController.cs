@@ -28,7 +28,7 @@ namespace SquaresApp.API.Controllers.v1
         /// Get all squares.
         /// </summary>
         /// <remarks>
-        /// Returns list of all points
+        /// Return A,B,C,D coordinates of all the identified squares.
         /// </remarks> 
         /// <response code="200">Success</response> 
         [HttpGet("")]

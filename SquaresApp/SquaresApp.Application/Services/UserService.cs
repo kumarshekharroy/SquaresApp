@@ -18,8 +18,7 @@ namespace SquaresApp.Application.Services
         {
             _userRepository = userRepository;
             _mapper = mapper;
-        }
-
+        } 
 
         /// <summary>
         /// create / add  a new user

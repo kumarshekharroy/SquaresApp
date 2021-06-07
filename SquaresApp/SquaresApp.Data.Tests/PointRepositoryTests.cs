@@ -51,12 +51,17 @@ namespace SquaresApp.Data.Tests
 
             //Act
             var result = await pointRepository.AddPointAsync(point);
+            var pointInDB = _squaresAppDBContext.Points.FirstOrDefault(x=>x.UserId==point.UserId && x.X==point.X && x.Y==point.Y);
 
 
             //Assert    
             Assert.NotNull(result.point);
+            Assert.True(result.point.Id>0);
+            Assert.Equal(result.point.Id,point.Id);
             Assert.Equal(result.point.X, point.X);
             Assert.Equal(result.point.Y, point.Y);
+            Assert.NotNull(pointInDB);
+            Assert.Equal(pointInDB.Id,result.point.Id);
             Assert.Empty(result.errorMessage);
             Assert.Equal(result.errorMessage, expectedMessage);
         }
