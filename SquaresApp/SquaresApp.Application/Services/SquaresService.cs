@@ -50,9 +50,9 @@ namespace SquaresApp.Application.Services
 
                     if (pointsHashset.TryGetValue(remainingDiagonalPoints.b, out var b) && pointsHashset.TryGetValue(remainingDiagonalPoints.d, out var d))
                     {
-                        var allFourVerticesSortedWRTAngleWithXAxis = new GetPointDTO[] { a, b, c, d }.OrderBy(x => Math.Atan2(x.X, x.Y)).ToArray(); // sort vertices of the square (rotate WRT X-axis) to filter out overlapping squares
+                        var allFourVerticesSortedWRTAngleWithOrigin = new GetPointDTO[] { a, b, c, d }.OrderBy(x => Math.Atan2(x.X, x.Y)).ToArray(); // sort vertices of the square (rotate WRT Origin) to filter out overlapping squares
 
-                        var squareDTO = new SquareDTO { A = allFourVerticesSortedWRTAngleWithXAxis[0], B = allFourVerticesSortedWRTAngleWithXAxis[1], C = allFourVerticesSortedWRTAngleWithXAxis[2], D = allFourVerticesSortedWRTAngleWithXAxis[3] };
+                        var squareDTO = new SquareDTO { A = allFourVerticesSortedWRTAngleWithOrigin[0], B = allFourVerticesSortedWRTAngleWithOrigin[1], C = allFourVerticesSortedWRTAngleWithOrigin[2], D = allFourVerticesSortedWRTAngleWithOrigin[3] };
 
                         squaresFound.Add(squareDTO); // Hashset will take care of duplicates.
                     }

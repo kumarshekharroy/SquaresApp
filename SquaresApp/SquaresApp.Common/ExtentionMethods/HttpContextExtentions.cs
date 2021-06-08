@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using SquaresApp.Common.Constants;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SquaresApp.Common.ExtentionMethods
 {

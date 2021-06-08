@@ -1,10 +1,8 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using SquaresApp.API.Controllers.v1;
 using SquaresApp.Application.IServices;
-using SquaresApp.Application.Profiles;
 using SquaresApp.Common.Constants;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Common.Helpers;
@@ -16,11 +14,11 @@ namespace SquaresApp.API.Tests
 {
     public class UserControllerTests
     {
-         
+
         private readonly Mock<IUserService> _mockedUserService;
         private readonly AppSettings _appSettings;
         public UserControllerTests()
-        {  
+        {
             _mockedUserService = new Mock<IUserService>();
             _appSettings = new AppSettings() { JWTConfig = new JWTConfig { Secret = StringHelper.GenerateRandomString(length: 150) } };
 

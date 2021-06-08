@@ -32,15 +32,36 @@
 10. Go to http://localhost:5000 or https://localhost:5001 to play with swagger UI 
 
 
-## Points to know :
+## Caching
+
+1. `Custom Distributed(using redis)/InMemory(as fallback to distributed)` caching is implemented to improve  performance, scalability and lower the response time. 
+
+2. `SlidingExpirationTime` and `AbsoluteExpirationTime` for the cache can be changed from `CacheConfig` section of `appsettings.{env}.json` file. Set these values to `0` to disable caching.
+
+3. To make the caching distributed set a valid Redis connection-string in `ConnString` field present in the `RedisConfig` section of `appsettings.{env}.json` file. Leave the field empty/blank to continue with InMemory caching.
+
+
+## Logging 
+
+1. The application is using serilog to log each and every request and their response and exception if there is any on console and in file inside `SquaresApp\SquaresApp/SquaresApp.API\bin\{Debug/Release}\net5.0` `Logs` directory. 
+
+2. The log level, log path etc. can be changed by modifying serilog section of `appsettings.json` or `appsettings.{env}.json` file. 
+
+
+## Importing Points
+
+1. `/Points/Import` endpoint expect points in CSV file format. 
+
+2. A sample CSV file (`points-import-sample.csv`) for the same has been included in the `Example` directory of the repository. 
+
+
+## Other Points to know :
 
 1. Seed data for User and Points are included in the migration. So, The migration will by default create two users `User_1: {username:"Admin",password:"Admin"}, User_2: {username:"User",password:"User"}` and their respective few records in Points table.
  
 2. Different environments like `Development` and `Prodution` are supported. e.g. Development Env. specific settings can be modified or overridden by `appsettings.Development.json` . 
 
-3. The application is using serilog to log each and every request and their response and exception if there is any on console and in file inside `SquaresApp\SquaresApp/SquaresApp.API\bin\{Debug/Release}\net5.0` `Logs` folder. The log level, log path etc. can be changed by modifying serilog section of `appsettings.json` or `appsettings.{Development/Production}.json` file. 
-
-4. TTL of JWT tokens (fresh) and JWT signing key/secret can be changed from `appsettings.{Development/Production}.json` file.
+4. TTL of JWT tokens (fresh) and JWT signing key/secret can be changed from `appsettings.{env}.json` file.
 
 5. All the layers of the project are Unit tested by using `Xunit` framework.
 
@@ -48,12 +69,4 @@
 
 7. `SHA256` hashing algorithm is used to securely store user password in the database. 
  
-8. Register and Login are open endpoints. Hence no jwt token is required in call to these endpoints.
-
-9. `Custom Distributed(using redis)/InMemory(as fallback to distributed)` caching is implemented to improve  performance, scalability and lower the response time. 
-
-10. `SlidingExpirationTime` and `AbsoluteExpirationTime` for the cache can be changed from `CacheConfig` section of `appsettings.{Development/Production}.json` file. Set these values to `0` to disable caching.
-
-11. To make the caching distributed set a valid Redis connection string in `ConnString` field present in the `RedisConfig` section of `appsettings.{Development/Production}.json` file. Leave the field empty/blank to continue with InMemory caching.
-
-12. `/Points/Import` endpoint expect points in csv file format. A sample CSV file (`points-import-sample.csv`) for the same has been included in the root directory of the repository. 
+8. Register and Login are open endpoints. Hence no JWT token is required in call to these endpoints.

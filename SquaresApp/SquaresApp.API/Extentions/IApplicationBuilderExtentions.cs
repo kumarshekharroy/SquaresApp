@@ -1,13 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
 using SquaresApp.Common.Constants;
-using SquaresApp.Common.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace SquaresApp.API.Extentions
 {
@@ -39,6 +31,6 @@ namespace SquaresApp.API.Extentions
 
             return app;
         }
-       
+
     }
 }

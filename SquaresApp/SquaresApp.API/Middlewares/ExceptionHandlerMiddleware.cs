@@ -4,9 +4,8 @@ using Microsoft.Extensions.Logging;
 using SquaresApp.Common.Constants;
 using SquaresApp.Common.Models;
 using System;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks; 
+using System.Threading.Tasks;
 
 namespace SquaresApp.API.Middlewares
 {
@@ -44,7 +43,7 @@ namespace SquaresApp.API.Middlewares
 
             var response = new Response<object> { Message = ConstantValues.UnexpectedErrorMessage, Data = new { Error = new { Message = ex.InnerException?.Message ?? ex.Message, Type = ex.GetType().ToString() } } };
 
-            await ctx.Response.Body.WriteAsync(JsonSerializer.SerializeToUtf8Bytes(response)); 
+            await ctx.Response.Body.WriteAsync(JsonSerializer.SerializeToUtf8Bytes(response));
 
             _logger.LogError(ex, "Exception Info ");
 

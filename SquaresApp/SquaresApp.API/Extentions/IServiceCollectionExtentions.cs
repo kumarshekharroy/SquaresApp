@@ -14,11 +14,8 @@ using SquaresApp.Data.Repositories;
 using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace SquaresApp.API.Extentions
 {
@@ -67,22 +64,6 @@ namespace SquaresApp.API.Extentions
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration[ConstantValues.JWTSecretPath])),
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                };
-                options.Events = new JwtBearerEvents
-                {
-                    OnChallenge = context =>
-                    {
-                        context.Response.OnStarting(async () =>
-                        {
-                            context.Response.ContentType = ConstantValues.JSONContentType;
-
-                            var result = JsonSerializer.SerializeToUtf8Bytes(new Response<string> { Message = ConstantValues.UnauthorizedRequestMessage });
-
-                            await context.Response.Body.WriteAsync(result);
-                        });
-
-                        return Task.CompletedTask;
-                    }
                 };
             });
 
@@ -148,7 +129,7 @@ namespace SquaresApp.API.Extentions
 
                 c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>(); // Adds "(Auth)" to the summary so that you can see which endpoints have Authorization 
                 c.OperationFilter<FileUploadOperation>();
-                c.SchemaFilter<SwaggerSchemaFilter>(); 
+                c.SchemaFilter<SwaggerSchemaFilter>();
                 c.OperationFilter<AddHeaderOperationFilter>(ConstantValues.CorrelationIdHeader, ConstantValues.CorrelationIDHeaderDescription, false); // adds any string you like to the request headers - in this case, a correlation id
 
             });

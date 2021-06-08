@@ -1,6 +1,5 @@
 ﻿using Moq;
 using SquaresApp.Application.Services;
-using SquaresApp.Common.Constants;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Data.IRepositories;
 using SquaresApp.Data.Models;
@@ -19,7 +18,7 @@ namespace SquaresApp.Application.Tests
         public PointServiceTests()
         {
             _mockedPointRepository = new Mock<IPointRepository>();
-        } 
+        }
 
         /// <summary>
         /// GetAllPoints Test Successful
@@ -141,7 +140,7 @@ namespace SquaresApp.Application.Tests
 
             //Arrange    
             var pointDTOs = new PointDTO[] { new PointDTO() { X = 1, Y = 2 } };
-            var expectedResult = (default(IEnumerable<GetPointDTO>), errorMessage:"Some Other Error.");
+            var expectedResult = (default(IEnumerable<GetPointDTO>), errorMessage: "Some Other Error.");
 
             _mockedPointRepository.Setup(obj => obj.AddAllPointsAsync(It.IsAny<long>(), It.IsAny<IEnumerable<Point>>())).ReturnsAsync((default(IEnumerable<Point>), expectedResult.errorMessage)).Verifiable();
 

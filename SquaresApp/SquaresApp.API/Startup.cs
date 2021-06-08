@@ -64,6 +64,8 @@ namespace SquaresApp.API
 
             app.UseAuthentication();
 
+            app.UseCustomUnauthorizedResponse();
+
             app.UseAuthorization();
 
             app.UseCustomCaching();

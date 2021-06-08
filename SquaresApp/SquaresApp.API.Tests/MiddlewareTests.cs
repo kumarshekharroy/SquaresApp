@@ -11,6 +11,7 @@ using System;
 using System.IO;
 using System.Security.Claims;
 using System.Security.Principal;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -330,6 +331,10 @@ namespace SquaresApp.API.Tests
             Assert.True(Guid.TryParse(_defaultHttpContext.Response.Headers[ConstantValues.CorrelationIdHeader].ToString(), out var _));
         }
 
+        /// <summary>
+        /// Test ensures that the custom exception handler middleware is handling and logging exceptions
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task ExceptionHandlerMiddlewareTest()
         {
@@ -350,11 +355,17 @@ namespace SquaresApp.API.Tests
             mockLogger.Verify(x => x.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()));
         }
 
+        /// <summary>
+        /// Test ensures that the request/response logging middleware is working as intended
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task RequestResponseLoggingMiddlewareTest()
         {
             // Arrange  
-            Mock<ILogger<RequestResponseLoggingMiddleware>> mockLogger = new Mock<ILogger<RequestResponseLoggingMiddleware>>(); 
+            Mock<ILogger<RequestResponseLoggingMiddleware>> mockLogger = new Mock<ILogger<RequestResponseLoggingMiddleware>>();
+
+            _defaultHttpContext.Request.Path = "/Points";
 
             // Act
             var middlewareInstance = new RequestResponseLoggingMiddleware(next: (innerHttpContext) =>
@@ -368,5 +379,35 @@ namespace SquaresApp.API.Tests
             mockLogger.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(2));
         }
 
+        /// <summary>
+        /// Test ensures that the custom response is being sent for unauthorized request.
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task CustomUnauthorizedResponsePayloadMiddlewareTest()
+        {
+            // Arrange 
+            DefaultHttpContext defaultContext = new DefaultHttpContext();
+            defaultContext.Response.Body = new MemoryStream();
+            defaultContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+
+            // Act
+            var middlewareInstance = new CustomUnauthorizedResponseMiddleware(next: (innerHttpContext) =>
+            {
+                return Task.CompletedTask;
+            });
+
+            await middlewareInstance.InvokeAsync(defaultContext);
+
+            defaultContext.Response.Body.Seek(0, SeekOrigin.Begin);
+            var responseBodyAsText = await new StreamReader(defaultContext.Response.Body).ReadToEndAsync();
+
+            var deserializedResponse =JsonSerializer.Deserialize<Response<string>>(responseBodyAsText);
+
+            //Assert
+            Assert.True(defaultContext.Response.ContentType == ConstantValues.JSONContentType);
+            Assert.NotNull(deserializedResponse);
+            Assert.Equal(deserializedResponse.Message, ConstantValues.UnauthorizedRequestMessage);
+        }
     }
 }

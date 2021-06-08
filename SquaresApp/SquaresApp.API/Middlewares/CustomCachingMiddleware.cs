@@ -45,28 +45,11 @@ namespace SquaresApp.API.Middlewares
                 ctx.Response.ContentType = ConstantValues.JSONContentType;
                 await ctx.Response.Body.WriteAsync(cachedValue);
                 return;
-            }
+            } 
 
-            var originalBodyStream = ctx.Response.Body;
-            using var responseBody = new MemoryStream();
-            {
-                ctx.Response.Body = responseBody;
-                try
-                {
-                    await _next(ctx);
+            await _next(ctx);
 
-                    await SetResponseCacheAsync(ctx, userId, controllerName);
-
-                    responseBody.Seek(0, SeekOrigin.Begin);
-                    await responseBody.CopyToAsync(originalBodyStream);
-
-                }
-                finally
-                {
-                    ctx.Response.Body = originalBodyStream;
-                }
-
-            }
+            await SetResponseCacheAsync(ctx, userId, controllerName);
         }
 
         private async Task SetResponseCacheAsync(HttpContext ctx, long userId, string controllerName)

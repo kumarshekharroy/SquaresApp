@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SquaresApp.Application.IServices;
@@ -18,11 +17,11 @@ namespace SquaresApp.API.Controllers.v1
     {
 
         private readonly IUserService _userService;
-        private readonly AppSettings _appSettings; 
+        private readonly AppSettings _appSettings;
         public UserController(IUserService userService, AppSettings appSettings)
         {
             _userService = userService;
-            _appSettings = appSettings; 
+            _appSettings = appSettings;
         }
 
         /// <summary>
@@ -35,9 +34,11 @@ namespace SquaresApp.API.Controllers.v1
         /// <returns>Returns HttpResponse with registered user's detail on successful registration and error message when failed. </returns> 
         /// <response code="200">Registered</response>
         /// <response code="400">Validation failure</response> 
+        /// <response code="500">Unexpected error</response> 
         [HttpPost("Register")]
         [ProducesResponseType(typeof(Response<GetUserDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Response<string>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Response<object>), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Register([FromBody] UserDTO userDTO)
         {
 
@@ -75,7 +76,7 @@ namespace SquaresApp.API.Controllers.v1
         [ProducesResponseType(typeof(Response<string>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(Response<object>), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Login([FromBody] UserDTO userDTO)
-        {  
+        {
             if (userDTO is null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, new Response<string> { Message = "Invalid authentication payload." });

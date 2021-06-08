@@ -8,7 +8,6 @@ using SquaresApp.Common.Models;
 using SquaresApp.Common.SwaggerUtils;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SquaresApp.API.Controllers.v1
@@ -26,18 +25,22 @@ namespace SquaresApp.API.Controllers.v1
         }
 
         /// <summary>
-        /// Add new points to an existing list.
+        /// Add new point/s.
         /// </summary>
         /// <remarks>
-        /// Return list of points along with their database Id on successful addition.
+        /// Return list of points along with their record Id from database on successful addition.
         /// </remarks>
         /// <param name="pointDTOs">It is a list of points. A point consists of X and Y fields. </param> 
         /// <returns>Returns success response with list of added points on successful addition and error response with error message when failed. </returns> 
         /// <response code="200">Successfully added</response>
         /// <response code="400">Validation failure</response> 
+        /// <response code="401">Unauthorized request</response> 
+        /// <response code="500">Unexpected error</response> 
         [HttpPost("")]
         [ProducesResponseType(typeof(Response<IEnumerable<GetPointDTO>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Response<string>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Response<object>), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Response<string>), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Import([FromBody] IEnumerable<PointDTO> pointDTOs)
         {
 
@@ -64,14 +67,18 @@ namespace SquaresApp.API.Controllers.v1
         /// Import new points from CSV file and add them to an existing list.
         /// </summary>
         /// <remarks>
-        /// A CSV file having two columns `X` and `Y` respectively is expected in request. Return a list of points along with their database Id in response on successful addition.
+        /// A CSV file having only two columns `X` and `Y` respectively is expected in request.And return a list of points along with their record Id from database in response on successful addition.
         /// </remarks> 
         /// <returns>Returns success response with list of added points on successful addition and empty list or an error response with an error message when failed. </returns> 
         /// <response code="200">Successfully added</response>
         /// <response code="400">Validation failure</response> 
+        /// <response code="401">Unauthorized request</response> 
+        /// <response code="500">Unexpected error</response> 
         [HttpPost("Import")]
         [ProducesResponseType(typeof(Response<IEnumerable<GetPointDTO>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Response<string>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Response<object>), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Response<string>), StatusCodes.Status401Unauthorized)]
         [FileUploadOperation.FileContentType]
         public async Task<IActionResult> ImportFromCSV()
         {
@@ -81,7 +88,7 @@ namespace SquaresApp.API.Controllers.v1
             if (file?.Length > 0)
             {
                 using var reader = new StreamReader(file.OpenReadStream());
-                
+
                 while (reader.Peek() >= 0)
                 {
                     var csv = reader.ReadLine().Replace("\"", string.Empty).Split(",");
@@ -118,8 +125,12 @@ namespace SquaresApp.API.Controllers.v1
         /// Return list of all existing points.
         /// </remarks> 
         /// <response code="200">Success</response> 
+        /// <response code="401">Unauthorized request</response> 
+        /// <response code="500">Unexpected error</response> 
         [HttpGet("")]
         [ProducesResponseType(typeof(Response<IEnumerable<GetPointDTO>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Response<object>), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Response<string>), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Get()
         {
             var userId = User.GetUserId();
@@ -135,13 +146,17 @@ namespace SquaresApp.API.Controllers.v1
         /// <remarks>
         /// Provide a valid point id for successful deletion.
         /// </remarks>
-        /// <param name="PointId">It is database id of an existing point. </param> 
+        /// <param name="PointId">It is  of an existing point. </param> 
         /// <returns>Returns success response on successful deletion and error response with error message when failed.</returns> 
         /// <response code="200">Successfully added</response>
         /// <response code="400">Validation failure</response> 
+        /// <response code="401">Unauthorized request</response> 
+        /// <response code="500">Unexpected error</response> 
         [HttpDelete("{PointId}")]
         [ProducesResponseType(typeof(Response<string>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Response<string>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Response<object>), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Response<string>), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Delete([FromRoute] long PointId)
         {
             if (PointId <= 0)
