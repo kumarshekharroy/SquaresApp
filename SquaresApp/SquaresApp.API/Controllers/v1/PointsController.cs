@@ -64,9 +64,9 @@ namespace SquaresApp.API.Controllers.v1
         /// Import new points from CSV file and add them to an existing list.
         /// </summary>
         /// <remarks>
-        /// Return list of points along with their database Id on successful addition.
+        /// A CSV file having two columns `X` and `Y` respectively is expected in request. Return a list of points along with their database Id in response on successful addition.
         /// </remarks> 
-        /// <returns>Returns success response with list of added points on successful addition and error response with error message when failed. </returns> 
+        /// <returns>Returns success response with list of added points on successful addition and empty list or an error response with an error message when failed. </returns> 
         /// <response code="200">Successfully added</response>
         /// <response code="400">Validation failure</response> 
         [HttpPost("Import")]
