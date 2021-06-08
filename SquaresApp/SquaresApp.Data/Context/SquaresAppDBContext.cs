@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SquaresApp.Data.DomainConfigurations;
-using SquaresApp.Domain.Models;
+using SquaresApp.Data.Models;
 
 namespace SquaresApp.Data.Context
 {

@@ -1,5 +1,5 @@
 using SquaresApp.Data.Repositories;
-using SquaresApp.Domain.Models;
+using SquaresApp.Data.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,62 +9,7 @@ namespace SquaresApp.Data.Tests
 {
     public class PointRepositoryTests : RepositoryBase
     {
-        /// <summary>
-        /// AddPoint Test For Duplicate 
-        /// </summary>
-        /// <returns></returns>
-        [Fact]
-        public async Task AddPoint_AlreadyExist()
-        {
-
-            //Arrange   
-            var point = new Point() { X = -1, Y = -1, UserId = userId };
-            var expectedMessage = "Point already exists.";
-
-            var pointRepository = new PointRepository(_squaresAppDBContext);
-
-
-            //Act
-            var result = await pointRepository.AddPointAsync(point);
-
-
-            //Assert    
-            Assert.Null(result.point);
-            Assert.NotEmpty(result.errorMessage);
-            Assert.Equal(result.errorMessage, expectedMessage);
-        }
-
-        /// <summary>
-        /// AddPoint Test Success 
-        /// </summary>
-        /// <returns></returns>
-        [Fact]
-        public async Task AddPoint_Successful()
-        {
-
-            //Arrange   
-            var point = new Point() { X = -11, Y = -1, UserId = userId };
-            var expectedMessage = string.Empty;
-
-            var pointRepository = new PointRepository(_squaresAppDBContext);
-
-
-            //Act
-            var result = await pointRepository.AddPointAsync(point);
-            var pointInDB = _squaresAppDBContext.Points.FirstOrDefault(x=>x.UserId==point.UserId && x.X==point.X && x.Y==point.Y);
-
-
-            //Assert    
-            Assert.NotNull(result.point);
-            Assert.True(result.point.Id>0);
-            Assert.Equal(result.point.Id,point.Id);
-            Assert.Equal(result.point.X, point.X);
-            Assert.Equal(result.point.Y, point.Y);
-            Assert.NotNull(pointInDB);
-            Assert.Equal(pointInDB.Id,result.point.Id);
-            Assert.Empty(result.errorMessage);
-            Assert.Equal(result.errorMessage, expectedMessage);
-        }
+        
 
         /// <summary>
         /// DeletePoint Test For Invalidpoint Id 
@@ -137,7 +82,7 @@ namespace SquaresApp.Data.Tests
             //Assert    
             Assert.NotNull(result);
             Assert.IsAssignableFrom<IEnumerable<Point>>(result);
-            Assert.True(result.Count() > 0);
+            Assert.True(result.Any());
         }
 
         /// <summary>
@@ -186,7 +131,7 @@ namespace SquaresApp.Data.Tests
 
             //Assert    
             Assert.NotNull(result.points);
-            Assert.True(result.points.Count() > 0);
+            Assert.True(result.points.Any());
             Assert.Empty(result.errorMessage);
             Assert.Equal(result.errorMessage, expectedMessage);
         }

@@ -5,6 +5,7 @@ using SquaresApp.API.Controllers.v1;
 using SquaresApp.Application.IServices;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Common.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
@@ -28,11 +29,11 @@ namespace SquaresApp.API.Tests
         public async Task GetSquaresTest()
         {
             //Arrange    
-            var returnData = new SquareDTO[] { };
+            var returnData = Array.Empty<SquareDTO>();
             const string expectedMessage = "Successfully identified.";
             _mockedSquaresService.Setup(obj => obj.GetAllSquares(It.IsAny<long>())).ReturnsAsync(returnData).Verifiable();
 
-            var squareController = new SquareController(_mockedSquaresService.Object);
+            var squareController = new SquaresController(_mockedSquaresService.Object);
             squareController.ControllerContext = _controllerContext;
 
             //Act

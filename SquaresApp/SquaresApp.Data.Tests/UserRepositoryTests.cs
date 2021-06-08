@@ -1,7 +1,7 @@
 using SquaresApp.Common.ExtentionMethods;
 using SquaresApp.Common.Helpers;
 using SquaresApp.Data.Repositories;
-using SquaresApp.Domain.Models;
+using SquaresApp.Data.Models;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;

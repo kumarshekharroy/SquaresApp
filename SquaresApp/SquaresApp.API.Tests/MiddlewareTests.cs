@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Moq;
 using SquaresApp.API.Middlewares;
 using SquaresApp.Common.Constants;
 using SquaresApp.Common.Models;
+using System;
 using System.IO;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -28,7 +31,8 @@ namespace SquaresApp.API.Tests
             fakeIdentity.AddClaim(new Claim(ConstantValues.UserId, UserId));
             var principal = new GenericPrincipal(fakeIdentity, null);
 
-            _defaultHttpContext = new DefaultHttpContext() { User=principal};  
+            _defaultHttpContext = new DefaultHttpContext() { User=principal}; 
+            _defaultHttpContext.Response.Body = new MemoryStream();
 
             var cacheConfig = new CacheConfig { AbsoluteExpirationTimeInMin = 2, SlidingExpirationTimeInMin = 1 };
             _appSettings = new AppSettings { CacheConfig = cacheConfig };
@@ -51,7 +55,7 @@ namespace SquaresApp.API.Tests
             var cacheKey = $"{UserId}-{CacheSuffix}";
             var expectedResponseString = "Some response.";
 
-            _defaultHttpContext.Request.Path = "/api/v1/Point";
+            _defaultHttpContext.Request.Path = "/api/v1/Points";
             _defaultHttpContext.Request.Method = "GET";
 
 
@@ -87,7 +91,7 @@ namespace SquaresApp.API.Tests
             var cacheKey = $"{UserId}-{CacheSuffix}";
             var expectedResponseString = "Some response.";
 
-            _defaultHttpContext.Request.Path = "/api/v1/Point";
+            _defaultHttpContext.Request.Path = "/api/v1/Points";
             _defaultHttpContext.Request.Method = "GET";
 
             var opts = Options.Create<MemoryDistributedCacheOptions>(new MemoryDistributedCacheOptions());
@@ -125,7 +129,7 @@ namespace SquaresApp.API.Tests
             var cacheKey = $"{UserId}-{CacheSuffix}";
             var expectedResponseString = "Some response.";
 
-            _defaultHttpContext.Request.Path = "/api/v1/Square";
+            _defaultHttpContext.Request.Path = "/api/v1/Squares";
             _defaultHttpContext.Request.Method = "GET";
 
 
@@ -161,7 +165,7 @@ namespace SquaresApp.API.Tests
             var cacheKey = $"{UserId}-{CacheSuffix}";
             var expectedResponseString = "Some response.";
 
-            _defaultHttpContext.Request.Path = "/api/v1/Square";
+            _defaultHttpContext.Request.Path = "/api/v1/Squares";
             _defaultHttpContext.Request.Method = "GET";
 
 
@@ -203,7 +207,7 @@ namespace SquaresApp.API.Tests
             _distributedCache.SetString(getPointsCacheKey, existingGetPointsCacheData);
             _distributedCache.SetString(getSquaresCacheKey, existingGetSquaresCacheData);
 
-            _defaultHttpContext.Request.Path = "/api/v1/Point/1";
+            _defaultHttpContext.Request.Path = "/api/v1/Points/1";
             _defaultHttpContext.Request.Method = "DELETE";
 
 
@@ -251,7 +255,7 @@ namespace SquaresApp.API.Tests
             _distributedCache.SetString(getPointsCacheKey, existingGetPointsCacheData);
             _distributedCache.SetString(getSquaresCacheKey, existingGetSquaresCacheData);
 
-            _defaultHttpContext.Request.Path = "/api/v1/Point/1";
+            _defaultHttpContext.Request.Path = "/api/v1/Points/1";
             _defaultHttpContext.Request.Method = "DELETE";
 
 
@@ -278,6 +282,91 @@ namespace SquaresApp.API.Tests
 
         }
 
+        /// <summary>
+        /// Test ensures that response contains the same correlation header which was supplied by client in request header
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task CorrelationIdMiddlewareTest_HeaderSuppliedByClient()
+        {
+            // Arrange
+            var CorrelationIDHeader = Guid.NewGuid().ToString();
+            _defaultHttpContext.Request.Headers[ConstantValues.CorrelationIdHeader] = CorrelationIDHeader;
+
+            // Act
+            var middlewareInstance = new CorrelationIdMiddleware(next: (innerHttpContext) =>
+            {
+                return Task.CompletedTask;
+            });
+
+            await middlewareInstance.InvokeAsync(_defaultHttpContext);
+
+
+            //Assert
+            Assert.True(_defaultHttpContext.Response.Headers.ContainsKey(ConstantValues.CorrelationIdHeader));
+            Assert.True(_defaultHttpContext.Response.Headers[ConstantValues.CorrelationIdHeader].ToString() == CorrelationIDHeader);
+        }
+
+        /// <summary>
+        /// Test ensures that response contains the a correlation header even when no correlation header was supplied by client in request
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task CorrelationIdMiddlewareTest_HeaderNotSuppliedByClient()
+        {
+            // Arrange   
+
+            // Act
+            var middlewareInstance = new CorrelationIdMiddleware(next: (innerHttpContext) =>
+            {
+                return Task.CompletedTask;
+            });
+
+            await middlewareInstance.InvokeAsync(_defaultHttpContext);
+
+
+            //Assert
+            Assert.True(_defaultHttpContext.Response.Headers.ContainsKey(ConstantValues.CorrelationIdHeader));
+            Assert.True(Guid.TryParse(_defaultHttpContext.Response.Headers[ConstantValues.CorrelationIdHeader].ToString(), out var _));
+        }
+
+        [Fact]
+        public async Task ExceptionHandlerMiddlewareTest()
+        {
+            // Arrange   
+            Mock<ILogger<ExceptionHandlerMiddleware>> mockLogger = new Mock<ILogger<ExceptionHandlerMiddleware>>(); 
+
+            // Act
+            var middlewareInstance = new ExceptionHandlerMiddleware(next: (innerHttpContext) =>
+            {
+                throw new Exception("Timeout occured");
+            }, logger: mockLogger.Object);
+
+            await middlewareInstance.InvokeAsync(_defaultHttpContext);
+
+
+            //Assert
+            Assert.True(_defaultHttpContext.Response.ContentType == ConstantValues.JSONContentType);
+            mockLogger.Verify(x => x.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()));
+        }
+
+        [Fact]
+        public async Task RequestResponseLoggingMiddlewareTest()
+        {
+            // Arrange  
+            Mock<ILogger<RequestResponseLoggingMiddleware>> mockLogger = new Mock<ILogger<RequestResponseLoggingMiddleware>>(); 
+
+            // Act
+            var middlewareInstance = new RequestResponseLoggingMiddleware(next: (innerHttpContext) =>
+            {
+                return Task.CompletedTask;
+            }, logger: mockLogger.Object);
+
+            await middlewareInstance.InvokeAsync(_defaultHttpContext);
+
+            //Assert  
+            mockLogger.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(2));
+        }
 
     }
 }

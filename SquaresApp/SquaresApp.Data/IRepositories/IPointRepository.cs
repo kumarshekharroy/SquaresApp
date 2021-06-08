@@ -1,19 +1,11 @@
-﻿using SquaresApp.Domain.Models;
+﻿using SquaresApp.Data.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SquaresApp.Domain.IRepositories
+namespace SquaresApp.Data.IRepositories
 {
     public interface IPointRepository
-    {
-        /// <summary>
-        /// add a new point in existing list of points
-        /// </summary> 
-        /// <param name="point"></param> 
-        /// <returns></returns>
-        Task<(Point point, string errorMessage)> AddPointAsync(Point point);
-
-
+    { 
         /// <summary>
         /// delete a point from existing list of points
         /// </summary>

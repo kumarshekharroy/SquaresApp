@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SquaresApp.Common.Constants;
 using SquaresApp.Data.Context;
-using SquaresApp.Domain.IRepositories;
-using SquaresApp.Domain.Models;
+using SquaresApp.Data.IRepositories;
+using SquaresApp.Data.Models;
 using System.Threading.Tasks;
 
 namespace SquaresApp.Data.Repositories

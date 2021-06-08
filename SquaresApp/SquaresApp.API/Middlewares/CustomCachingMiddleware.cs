@@ -25,15 +25,18 @@ namespace SquaresApp.API.Middlewares
             _next = next;
             _cache = cache;
 
-            _distributedCacheEntryOption = new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = appSettings.CacheConfig.AbsoluteExpirationTimeInMin > 0 ? TimeSpan.FromMinutes(appSettings.CacheConfig.AbsoluteExpirationTimeInMin) : null, SlidingExpiration = appSettings.CacheConfig.SlidingExpirationTimeInMin > 0 ? TimeSpan.FromMinutes(appSettings.CacheConfig.SlidingExpirationTimeInMin) : null };
+            _distributedCacheEntryOption = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = appSettings.CacheConfig.AbsoluteExpirationTimeInMin > 0 ? TimeSpan.FromMinutes(appSettings.CacheConfig.AbsoluteExpirationTimeInMin) : null,
+                SlidingExpiration = appSettings.CacheConfig.SlidingExpirationTimeInMin > 0 ? TimeSpan.FromMinutes(appSettings.CacheConfig.SlidingExpirationTimeInMin) : null
+            };
         }
 
         public async Task InvokeAsync(HttpContext ctx)
         {
             var userId = ctx.User.GetUserId();
 
-            //var controllerName = ctx.GetEndpoint()?.Metadata?.GetMetadata<ControllerActionDescriptor>()?.ControllerName; //
-            var controllerName = ctx.Request.Path.ToString().Split('/', StringSplitOptions.RemoveEmptyEntries).Skip(2).FirstOrDefault()?.ToLower().Trim(); // Path e.g /api/v1/Point/... 
+            var controllerName = ctx.Request.Path.ToString().Split('/', StringSplitOptions.RemoveEmptyEntries).Skip(2).FirstOrDefault()?.ToLower().Trim(); // Path e.g /api/v1/Points/... 
 
             var cachedValue = await GetCachedResponseAsync(ctx, userId, controllerName);
 
@@ -48,28 +51,35 @@ namespace SquaresApp.API.Middlewares
             using var responseBody = new MemoryStream();
             {
                 ctx.Response.Body = responseBody;
+                try
+                {
+                    await _next(ctx);
 
-                await _next(ctx);
+                    await SetResponseCacheAsync(ctx, userId, controllerName);
 
-                await SetResponseCacheAsync(ctx, userId, controllerName);
+                    responseBody.Seek(0, SeekOrigin.Begin);
+                    await responseBody.CopyToAsync(originalBodyStream);
 
-                await responseBody.CopyToAsync(originalBodyStream);
+                }
+                finally
+                {
+                    ctx.Response.Body = originalBodyStream;
+                }
+
             }
         }
 
         private async Task SetResponseCacheAsync(HttpContext ctx, long userId, string controllerName)
         {
-            ctx.Response.Body.Seek(0, SeekOrigin.Begin);
+
             if (ctx.Response.StatusCode == StatusCodes.Status200OK) //only cache the successful responses.
             {
-
-                var buffer = new byte[Convert.ToInt32(ctx.Response.Body.Length)];
-                await ctx.Response.Body.ReadAsync(buffer, 0, buffer.Length);
                 ctx.Response.Body.Seek(0, SeekOrigin.Begin);
-
+                var buffer = new byte[Convert.ToInt32(ctx.Response.Body.Length)];
+                await ctx.Response.Body.ReadAsync(buffer);
                 switch (controllerName)
                 {
-                    case "point":
+                    case "points":
                         {
 
                             if (ctx.Request.Method == "GET") // cache points response to prevent database roundttrip.
@@ -79,17 +89,15 @@ namespace SquaresApp.API.Middlewares
                             else if (ctx.Request.Method == "DELETE") // invalidate/remove other point and square related cache as an existing point has been deleted.
                             {
                                 await _cache.SetAsync($"{userId}-{ctx.Request.Path}", buffer, _distributedCacheEntryOption);
-                                await _cache.RemoveAsync($"{userId}-{CachePointsGet}");
-                                await _cache.RemoveAsync($"{userId}-{CacheSquaresGet}");
+                                await ClearExistingPointsAndSquaresCacheAsync(userId);
                             }
                             else if (ctx.Request.Method == "POST") // invalidate/remove other point and square related cache as one or more than one new existing points have been added.
                             {
-                                await _cache.RemoveAsync($"{userId}-{CachePointsGet}");
-                                await _cache.RemoveAsync($"{userId}-{CacheSquaresGet}");
+                                await ClearExistingPointsAndSquaresCacheAsync(userId);
                             }
                         }
                         break;
-                    case "square":
+                    case "squares":
                         {
                             if (ctx.Request.Method == "GET") // cache the squares identified to prevent re-identification processing as this won't change until one or more point is added or removed.
                             {
@@ -102,6 +110,12 @@ namespace SquaresApp.API.Middlewares
                         break;
                 }
             }
+            //local function
+            async Task ClearExistingPointsAndSquaresCacheAsync(long userId)
+            {
+                await _cache.RemoveAsync($"{userId}-{CachePointsGet}");
+                await _cache.RemoveAsync($"{userId}-{CacheSquaresGet}");
+            }
         }
 
         private async Task<byte[]> GetCachedResponseAsync(HttpContext ctx, long userId, string controllerName)
@@ -109,7 +123,7 @@ namespace SquaresApp.API.Middlewares
             var cachedValue = default(byte[]);
             switch (controllerName)
             {
-                case "point":
+                case "points":
                     {
                         if (ctx.Request.Method == "GET")
                         {
@@ -121,7 +135,7 @@ namespace SquaresApp.API.Middlewares
                         }
                     }
                     break;
-                case "square":
+                case "squares":
                     {
                         if (ctx.Request.Method == "GET")
                         {
@@ -138,7 +152,7 @@ namespace SquaresApp.API.Middlewares
             return cachedValue;
         }
     }
-     
+
     public static class CustomCachingMiddlewareExt
     {
         /// <summary>

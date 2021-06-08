@@ -4,8 +4,7 @@
     /// User's detail DTO
     /// </summary> 
     public class UserDTO
-    {
-
+    { 
         /// <summary>
         /// Username of the User
         /// </summary>

@@ -1,4 +1,4 @@
-﻿namespace SquaresApp.Domain.Models
+﻿namespace SquaresApp.Data.Models
 {
     public class Point
     {

@@ -20,7 +20,7 @@ namespace SquaresApp.Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("SquaresApp.Domain.Models.Point", b =>
+            modelBuilder.Entity("SquaresApp.Data.Models.Point", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -43,7 +43,7 @@ namespace SquaresApp.Data.Migrations
                     b.ToTable("Points");
                 });
 
-            modelBuilder.Entity("SquaresApp.Domain.Models.User", b =>
+            modelBuilder.Entity("SquaresApp.Data.Models.User", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -84,9 +84,9 @@ namespace SquaresApp.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SquaresApp.Domain.Models.Point", b =>
+            modelBuilder.Entity("SquaresApp.Data.Models.Point", b =>
                 {
-                    b.HasOne("SquaresApp.Domain.Models.User", "User")
+                    b.HasOne("SquaresApp.Data.Models.User", "User")
                         .WithMany("Points")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -95,7 +95,7 @@ namespace SquaresApp.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SquaresApp.Domain.Models.User", b =>
+            modelBuilder.Entity("SquaresApp.Data.Models.User", b =>
                 {
                     b.Navigation("Points");
                 });

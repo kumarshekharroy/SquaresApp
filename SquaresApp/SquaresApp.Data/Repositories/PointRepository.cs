@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SquaresApp.Common.Constants;
 using SquaresApp.Data.Context;
-using SquaresApp.Domain.EqualityComparers;
-using SquaresApp.Domain.IRepositories;
-using SquaresApp.Domain.Models;
+using SquaresApp.Data.EqualityComparers;
+using SquaresApp.Data.IRepositories;
+using SquaresApp.Data.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,50 +30,24 @@ namespace SquaresApp.Data.Repositories
         {
             var existingPoints = await _squaresAppDBContext.Points.Where(rec => rec.UserId == userId).ToArrayAsync();
 
-            var pointsTobeAdded = points.Distinct(new PointEqualityComparer()).Except(existingPoints, new PointEqualityComparer());
+            var pointsToBeAdded = points.Distinct(new PointEqualityComparer()).Except(existingPoints, new PointEqualityComparer());
 
-            if (!pointsTobeAdded.Any())
+            if (!pointsToBeAdded.Any())
             {
                 return (points: default, errorMessage: "Points already exist.");
             }
 
-            await _squaresAppDBContext.Points.AddRangeAsync(pointsTobeAdded);
+            await _squaresAppDBContext.Points.AddRangeAsync(pointsToBeAdded);
 
             if (await _squaresAppDBContext.SaveChangesAsync() == 0)
             {
                 return (points: default, errorMessage: ConstantValues.UnexpectedErrorMessage);
             }
 
-            return (points: pointsTobeAdded, errorMessage: string.Empty);
+            return (points: pointsToBeAdded, errorMessage: string.Empty);
 
         }
-
-        /// <summary>
-        /// add a new point in existing list of points
-        /// </summary> 
-        /// <param name="point"></param> 
-        /// <returns></returns>
-        public async Task<(Point point, string errorMessage)> AddPointAsync(Point point)
-        {
-
-            var pointExists = await _squaresAppDBContext.Points.AnyAsync(rec => rec.UserId == point.UserId && rec.X == point.X && rec.Y == point.Y);
-
-            if (pointExists)
-            {
-                return (point: default, errorMessage: "Point already exists.");
-            }
-
-            await _squaresAppDBContext.Points.AddAsync(point);
-
-            if (await _squaresAppDBContext.SaveChangesAsync() == 0)
-            {
-                return (point: default, errorMessage: ConstantValues.UnexpectedErrorMessage);
-            }
-
-            return (point: point, errorMessage: string.Empty);
-
-        }
-
+         
         /// <summary>
         /// delete a point from existing list of points
         /// </summary>

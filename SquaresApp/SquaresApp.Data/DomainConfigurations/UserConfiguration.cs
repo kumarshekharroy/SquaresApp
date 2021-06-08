@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SquaresApp.Common.ExtentionMethods;
-using SquaresApp.Domain.Models;
+using SquaresApp.Data.Models;
 
 namespace SquaresApp.Data.DomainConfigurations
 {
@@ -18,7 +18,7 @@ namespace SquaresApp.Data.DomainConfigurations
             builder.HasKey(prop => prop.Id).HasName("PK_User_Id");
             builder.Property(prop => prop.Id).ValueGeneratedOnAdd().IsRequired();
 
-            builder.HasIndex(prop => prop.Username).IsUnique().HasDatabaseName("TDX_User_Username");
+            builder.HasIndex(prop => prop.Username).IsUnique().HasDatabaseName("IDX_User_Username");
 
             builder.Property(prop => prop.Username).HasMaxLength(50).IsRequired();
             builder.Property(prop => prop.Password).HasMaxLength(64).IsRequired();

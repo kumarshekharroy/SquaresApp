@@ -1,8 +1,8 @@
 ﻿using Moq;
 using SquaresApp.Application.Services;
 using SquaresApp.Common.DTOs;
-using SquaresApp.Domain.IRepositories;
-using SquaresApp.Domain.Models;
+using SquaresApp.Data.IRepositories;
+using SquaresApp.Data.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,12 +12,12 @@ namespace SquaresApp.Application.Tests
 {
     public class SquareServiceTests : ServiceBase
     {
-        private readonly Mock<IPointRepository> _mockedPointrRepository;
+        private readonly Mock<IPointRepository> _mockedPointRepository;
         private const long _userId = 1;
         private const int _zero = 0;
         public SquareServiceTests()
         {
-            _mockedPointrRepository = new Mock<IPointRepository>();
+            _mockedPointRepository = new Mock<IPointRepository>();
         }
 
 
@@ -30,9 +30,9 @@ namespace SquaresApp.Application.Tests
         {
 
             //Arrange      
-            _mockedPointrRepository.Setup(obj => obj.GetAllPointsAsync(It.IsAny<long>())).ReturnsAsync(Enumerable.Empty<Point>()).Verifiable();
+            _mockedPointRepository.Setup(obj => obj.GetAllPointsAsync(It.IsAny<long>())).ReturnsAsync(Enumerable.Empty<Point>()).Verifiable();
 
-            var pointService = new SquaresService(_mapper, _mockedPointrRepository.Object);
+            var pointService = new SquaresService(_mapper, _mockedPointRepository.Object);
 
 
             //Act
@@ -40,7 +40,7 @@ namespace SquaresApp.Application.Tests
 
 
             //Assert   
-            _mockedPointrRepository.Verify(obj => obj.GetAllPointsAsync(It.IsAny<long>()), Times.Once());
+            _mockedPointRepository.Verify(obj => obj.GetAllPointsAsync(It.IsAny<long>()), Times.Once());
             Assert.NotNull(result);
             Assert.IsAssignableFrom<IEnumerable<SquareDTO>>(result);
             Assert.Equal(result.Count(), _zero);

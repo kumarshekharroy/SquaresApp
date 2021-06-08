@@ -3,7 +3,7 @@ using SquaresApp.Application.IServices;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Common.EqualityComparers;
 using SquaresApp.Common.Helpers;
-using SquaresApp.Domain.IRepositories;
+using SquaresApp.Data.IRepositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,7 +41,7 @@ namespace SquaresApp.Application.Services
 
             for (int i = 0; i < points.Length; i++)
             {
-                for (int j = i + 1; j < points.Length; j++) // started from i+1 cuz line connecting points A and B will be same as Line connnecting points B and A. i.e. Line AB == Line BA.
+                for (int j = i + 1; j < points.Length; j++) // started from i+1 cuz line connecting points A and B will be same as Line connecting points B and A. i.e. Line AB == Line BA.
                 {
                     var a = points[i];
                     var c = points[j];
@@ -50,7 +50,7 @@ namespace SquaresApp.Application.Services
 
                     if (pointsHashset.TryGetValue(remainingDiagonalPoints.b, out var b) && pointsHashset.TryGetValue(remainingDiagonalPoints.d, out var d))
                     {
-                        var allFourVerticesSortedWRTAngleWithXAxis = new GetPointDTO[] { a, b, c, d }.OrderBy(x => Math.Atan2(x.X, x.Y)).ToArray(); // sort vertices of the square (rotate WRT X-exis) to filter out overlapping squares
+                        var allFourVerticesSortedWRTAngleWithXAxis = new GetPointDTO[] { a, b, c, d }.OrderBy(x => Math.Atan2(x.X, x.Y)).ToArray(); // sort vertices of the square (rotate WRT X-axis) to filter out overlapping squares
 
                         var squareDTO = new SquareDTO { A = allFourVerticesSortedWRTAngleWithXAxis[0], B = allFourVerticesSortedWRTAngleWithXAxis[1], C = allFourVerticesSortedWRTAngleWithXAxis[2], D = allFourVerticesSortedWRTAngleWithXAxis[3] };
 

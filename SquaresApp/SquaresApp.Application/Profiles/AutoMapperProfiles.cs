@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using SquaresApp.Common.Constants;
 using SquaresApp.Common.DTOs;
-using SquaresApp.Domain.Models;
+using SquaresApp.Data.Models;
 
 namespace SquaresApp.Application.Profiles
 {

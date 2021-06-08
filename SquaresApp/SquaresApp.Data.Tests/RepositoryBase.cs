@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SquaresApp.Common.ExtentionMethods;
 using SquaresApp.Data.Context;
-using SquaresApp.Domain.Models;
+using SquaresApp.Data.Models;
 using System;
 using System.Collections.Generic;
 

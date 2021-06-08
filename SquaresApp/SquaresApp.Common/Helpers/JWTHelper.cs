@@ -9,7 +9,7 @@ using System.Text;
 
 namespace SquaresApp.Common.Helpers
 {
-    public class JWTHelper
+    public static class JWTHelper
     {
         /// <summary>
         /// takes userdetail and Jwt config as parameter and returns a jwt token

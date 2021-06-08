@@ -2,8 +2,8 @@
 using SquaresApp.Application.IServices;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Common.ExtentionMethods;
-using SquaresApp.Domain.IRepositories;
-using SquaresApp.Domain.Models;
+using SquaresApp.Data.IRepositories;
+using SquaresApp.Data.Models;
 using System.Threading.Tasks;
 
 namespace SquaresApp.Application.Services
@@ -18,7 +18,7 @@ namespace SquaresApp.Application.Services
         {
             _userRepository = userRepository;
             _mapper = mapper;
-        } 
+        }
 
         /// <summary>
         /// create / add  a new user
@@ -28,14 +28,11 @@ namespace SquaresApp.Application.Services
         public async Task<(GetUserDTO getUserDTO, string errorMessage)> AddUserAsync(UserDTO userDTO)
         {
 
-            if (string.IsNullOrWhiteSpace(userDTO.Username))
-            {
-                return (getUserDTO: default, errorMessage: "Invalid username.");
-            }
+            var errorMessage = ValidateUserDTO(userDTO);
 
-            if (string.IsNullOrWhiteSpace(userDTO.Password))
+            if (!string.IsNullOrWhiteSpace(errorMessage))
             {
-                return (getUserDTO: default, errorMessage: "Invalid password.");
+                return (getUserDTO: default, errorMessage);
             }
 
             var user = _mapper.Map<User>(userDTO);
@@ -56,14 +53,11 @@ namespace SquaresApp.Application.Services
         /// <returns></returns>
         public async Task<(GetUserDTO getUserDTO, string errorMessage)> GetUserAsync(UserDTO userDTO)
         {
-            if (string.IsNullOrWhiteSpace(userDTO.Username))
-            {
-                return (getUserDTO: default, errorMessage: "Invalid username.");
-            }
+            var errorMessage = ValidateUserDTO(userDTO);
 
-            if (string.IsNullOrWhiteSpace(userDTO.Password))
+            if (!string.IsNullOrWhiteSpace(errorMessage))
             {
-                return (getUserDTO: default, errorMessage: "Invalid password.");
+                return (getUserDTO: default, errorMessage);
             }
 
             userDTO.Password = userDTO.Password.ToSHA256();
@@ -77,6 +71,20 @@ namespace SquaresApp.Application.Services
         }
 
 
+        private static string ValidateUserDTO(UserDTO userDTO)
+        {
+            if (string.IsNullOrWhiteSpace(userDTO.Username))
+            {
+                return "Invalid username.";
+            }
+
+            if (string.IsNullOrWhiteSpace(userDTO.Password))
+            {
+                return "Invalid password.";
+            }
+
+            return string.Empty;
+        }
     }
 
 }

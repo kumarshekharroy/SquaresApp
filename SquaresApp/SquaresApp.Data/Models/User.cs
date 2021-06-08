@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SquaresApp.Domain.Models
+namespace SquaresApp.Data.Models
 {
     public class User
     {

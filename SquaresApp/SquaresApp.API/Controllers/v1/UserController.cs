@@ -18,13 +18,11 @@ namespace SquaresApp.API.Controllers.v1
     {
 
         private readonly IUserService _userService;
-        private readonly AppSettings _appSettings;
-        private readonly IMapper _mapper;
-        public UserController(IUserService userService, AppSettings appSettings, IMapper mapper)
+        private readonly AppSettings _appSettings; 
+        public UserController(IUserService userService, AppSettings appSettings)
         {
             _userService = userService;
-            _appSettings = appSettings;
-            _mapper = mapper;
+            _appSettings = appSettings; 
         }
 
         /// <summary>
@@ -77,8 +75,7 @@ namespace SquaresApp.API.Controllers.v1
         [ProducesResponseType(typeof(Response<string>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(Response<object>), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Login([FromBody] UserDTO userDTO)
-        {
-
+        {  
             if (userDTO is null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, new Response<string> { Message = "Invalid authentication payload." });

@@ -2,8 +2,8 @@
 using SquaresApp.Application.Services;
 using SquaresApp.Common.Constants;
 using SquaresApp.Common.DTOs;
-using SquaresApp.Domain.IRepositories;
-using SquaresApp.Domain.Models;
+using SquaresApp.Data.IRepositories;
+using SquaresApp.Data.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,80 +13,13 @@ namespace SquaresApp.Application.Tests
 {
     public class PointServiceTests : ServiceBase
     {
-        private readonly Mock<IPointRepository> _mockedPointrRepository;
+        private readonly Mock<IPointRepository> _mockedPointRepository;
         private const long _userId = 1;
         private const int _zero = 0;
         public PointServiceTests()
         {
-            _mockedPointrRepository = new Mock<IPointRepository>();
-        }
-
-
-        /// <summary>
-        /// AddPoint Test For Some failing some validation
-        /// </summary>
-        /// <returns></returns>
-        [Fact]
-        public async Task AddPointTest_FailedSomeValidation()
-        {
-
-            //Arrange    
-            var pointDTO = new PointDTO() { X = 1, Y = 2 };
-            var expectedResult = (default(GetPointDTO), "someError message.");
-
-            _mockedPointrRepository.Setup(obj => obj.AddPointAsync(It.IsAny<Point>())).ReturnsAsync((default(Point), expectedResult.Item2)).Verifiable();
-
-            var pointService = new PointService(_mapper, _mockedPointrRepository.Object);
-
-
-            //Act
-            var result = await pointService.AddPointAsync(_userId, pointDTO);
-
-
-            //Assert   
-            _mockedPointrRepository.Verify(obj => obj.AddPointAsync(It.IsAny<Point>()), Times.Once());
-            Assert.Null(result.getPointDTO);
-            Assert.NotNull(result.errorMessage);
-            Assert.Equal(result.errorMessage, expectedResult.Item2);
-
-        }
-
-        /// <summary>
-        /// AddPoint Test Successful
-        /// </summary>
-        /// <returns></returns>
-        [Fact]
-        public async Task AddPointTest_Successful()
-        {
-
-            //Arrange    
-            var pointDTO = new PointDTO() { X = 1, Y = 2 };
-
-            var point = _mapper.Map<Point>(pointDTO, opt =>
-             {
-                 opt.Items[ConstantValues.UserId] = _userId;
-             });
-
-            var expectedResult = (new GetPointDTO { Id = 1, X = pointDTO.X, Y = pointDTO.Y }, string.Empty);
-
-            _mockedPointrRepository.Setup(obj => obj.AddPointAsync(It.IsAny<Point>())).ReturnsAsync((point, expectedResult.Item2)).Verifiable();
-
-            var pointService = new PointService(_mapper, _mockedPointrRepository.Object);
-
-
-            //Act
-            var result = await pointService.AddPointAsync(_userId, pointDTO);
-
-
-            //Assert   
-            _mockedPointrRepository.Verify(obj => obj.AddPointAsync(It.IsAny<Point>()), Times.Once());
-            Assert.NotNull(result.getPointDTO);
-            Assert.Equal(result.getPointDTO.X, expectedResult.Item1.X);
-            Assert.Equal(result.getPointDTO.Y, expectedResult.Item1.Y);
-            Assert.Empty(result.errorMessage);
-            Assert.Equal(result.errorMessage, expectedResult.Item2);
-
-        }
+            _mockedPointRepository = new Mock<IPointRepository>();
+        } 
 
         /// <summary>
         /// GetAllPoints Test Successful
@@ -97,9 +30,9 @@ namespace SquaresApp.Application.Tests
         {
 
             //Arrange      
-            _mockedPointrRepository.Setup(obj => obj.GetAllPointsAsync(It.IsAny<long>())).ReturnsAsync(Enumerable.Empty<Point>()).Verifiable();
+            _mockedPointRepository.Setup(obj => obj.GetAllPointsAsync(It.IsAny<long>())).ReturnsAsync(Enumerable.Empty<Point>()).Verifiable();
 
-            var pointService = new PointService(_mapper, _mockedPointrRepository.Object);
+            var pointService = new PointService(_mapper, _mockedPointRepository.Object);
 
 
             //Act
@@ -107,7 +40,7 @@ namespace SquaresApp.Application.Tests
 
 
             //Assert   
-            _mockedPointrRepository.Verify(obj => obj.GetAllPointsAsync(It.IsAny<long>()), Times.Once());
+            _mockedPointRepository.Verify(obj => obj.GetAllPointsAsync(It.IsAny<long>()), Times.Once());
             Assert.NotNull(result);
             Assert.IsAssignableFrom<IEnumerable<GetPointDTO>>(result);
             Assert.Equal(result.Count(), _zero);
@@ -124,9 +57,9 @@ namespace SquaresApp.Application.Tests
             //Arrange      
             long pointId = 1;
             var expectedResult = (default(bool), "someError message.");
-            _mockedPointrRepository.Setup(obj => obj.DeletePointAsync(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(expectedResult).Verifiable();
+            _mockedPointRepository.Setup(obj => obj.DeletePointAsync(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(expectedResult).Verifiable();
 
-            var pointService = new PointService(_mapper, _mockedPointrRepository.Object);
+            var pointService = new PointService(_mapper, _mockedPointRepository.Object);
 
 
             //Act
@@ -134,7 +67,7 @@ namespace SquaresApp.Application.Tests
 
 
             //Assert   
-            _mockedPointrRepository.Verify(obj => obj.DeletePointAsync(It.IsAny<long>(), It.IsAny<long>()), Times.Once());
+            _mockedPointRepository.Verify(obj => obj.DeletePointAsync(It.IsAny<long>(), It.IsAny<long>()), Times.Once());
             Assert.False(result.isDeleted);
             Assert.NotEmpty(result.errorMessage);
             Assert.Equal(result.errorMessage, expectedResult.Item2);
@@ -150,10 +83,10 @@ namespace SquaresApp.Application.Tests
 
             //Arrange      
             long pointId = 1;
-            var expectedResult = (true, string.Empty);
-            _mockedPointrRepository.Setup(obj => obj.DeletePointAsync(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(expectedResult).Verifiable();
+            var expectedResult = (true, errorMessage: string.Empty);
+            _mockedPointRepository.Setup(obj => obj.DeletePointAsync(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(expectedResult).Verifiable();
 
-            var pointService = new PointService(_mapper, _mockedPointrRepository.Object);
+            var pointService = new PointService(_mapper, _mockedPointRepository.Object);
 
 
             //Act
@@ -161,10 +94,10 @@ namespace SquaresApp.Application.Tests
 
 
             //Assert   
-            _mockedPointrRepository.Verify(obj => obj.DeletePointAsync(It.IsAny<long>(), It.IsAny<long>()), Times.Once());
+            _mockedPointRepository.Verify(obj => obj.DeletePointAsync(It.IsAny<long>(), It.IsAny<long>()), Times.Once());
             Assert.True(result.isDeleted);
             Assert.Empty(result.errorMessage);
-            Assert.Equal(result.errorMessage, expectedResult.Item2);
+            Assert.Equal(result.errorMessage, expectedResult.errorMessage);
         }
 
 
@@ -179,11 +112,11 @@ namespace SquaresApp.Application.Tests
 
             //Arrange    
             var pointDTOs = Enumerable.Empty<PointDTO>();
-            var expectedResult = (default(IEnumerable<GetPointDTO>), "No point supplied.");
+            var expectedResult = (default(IEnumerable<GetPointDTO>), errorMessage: "No point supplied.");
 
-            _mockedPointrRepository.Setup(obj => obj.AddAllPointsAsync(It.IsAny<long>(), It.IsAny<IEnumerable<Point>>())).ReturnsAsync((default(IEnumerable<Point>), expectedResult.Item2)).Verifiable();
+            _mockedPointRepository.Setup(obj => obj.AddAllPointsAsync(It.IsAny<long>(), It.IsAny<IEnumerable<Point>>())).ReturnsAsync((default(IEnumerable<Point>), expectedResult.errorMessage)).Verifiable();
 
-            var pointService = new PointService(_mapper, _mockedPointrRepository.Object);
+            var pointService = new PointService(_mapper, _mockedPointRepository.Object);
 
 
             //Act
@@ -191,10 +124,10 @@ namespace SquaresApp.Application.Tests
 
 
             //Assert   
-            _mockedPointrRepository.Verify(obj => obj.AddPointAsync(It.IsAny<Point>()), Times.Never());
+            _mockedPointRepository.Verify(obj => obj.AddAllPointsAsync(It.IsAny<long>(), It.IsAny<IEnumerable<Point>>()), Times.Never());
             Assert.Null(result.getPointDTOs);
             Assert.NotNull(result.errorMessage);
-            Assert.Equal(result.errorMessage, expectedResult.Item2);
+            Assert.Equal(result.errorMessage, expectedResult.errorMessage);
 
         }
 
@@ -208,11 +141,11 @@ namespace SquaresApp.Application.Tests
 
             //Arrange    
             var pointDTOs = new PointDTO[] { new PointDTO() { X = 1, Y = 2 } };
-            var expectedResult = (default(IEnumerable<GetPointDTO>), "Some Other Error.");
+            var expectedResult = (default(IEnumerable<GetPointDTO>), errorMessage:"Some Other Error.");
 
-            _mockedPointrRepository.Setup(obj => obj.AddAllPointsAsync(It.IsAny<long>(), It.IsAny<IEnumerable<Point>>())).ReturnsAsync((default(IEnumerable<Point>), expectedResult.Item2)).Verifiable();
+            _mockedPointRepository.Setup(obj => obj.AddAllPointsAsync(It.IsAny<long>(), It.IsAny<IEnumerable<Point>>())).ReturnsAsync((default(IEnumerable<Point>), expectedResult.errorMessage)).Verifiable();
 
-            var pointService = new PointService(_mapper, _mockedPointrRepository.Object);
+            var pointService = new PointService(_mapper, _mockedPointRepository.Object);
 
 
             //Act
@@ -220,10 +153,10 @@ namespace SquaresApp.Application.Tests
 
 
             //Assert   
-            _mockedPointrRepository.Verify(obj => obj.AddPointAsync(It.IsAny<Point>()), Times.Never());
+            _mockedPointRepository.Verify(obj => obj.AddAllPointsAsync(It.IsAny<long>(), It.IsAny<IEnumerable<Point>>()), Times.Once());
             Assert.Null(result.getPointDTOs);
             Assert.NotNull(result.errorMessage);
-            Assert.Equal(result.errorMessage, expectedResult.Item2);
+            Assert.Equal(result.errorMessage, expectedResult.errorMessage);
 
         }
 
@@ -233,16 +166,16 @@ namespace SquaresApp.Application.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task AddPointsTest_SuccessFful()
+        public async Task AddPointsTest_Successful()
         {
 
             //Arrange    
             var pointDTOs = new PointDTO[] { new PointDTO() { X = 1, Y = 2 } };
-            var expectedResult = (new GetPointDTO[] { new GetPointDTO() { X = 1, Y = 2 } }, string.Empty);
+            var expectedResult = (new GetPointDTO[] { new GetPointDTO() { X = 1, Y = 2 } }, errorMessage: string.Empty);
 
-            _mockedPointrRepository.Setup(obj => obj.AddAllPointsAsync(It.IsAny<long>(), It.IsAny<IEnumerable<Point>>())).ReturnsAsync((new Point[] { new Point() { X = 1, Y = 2 } }, expectedResult.Item2)).Verifiable();
+            _mockedPointRepository.Setup(obj => obj.AddAllPointsAsync(It.IsAny<long>(), It.IsAny<IEnumerable<Point>>())).ReturnsAsync((new Point[] { new Point() { X = 1, Y = 2 } }, expectedResult.errorMessage)).Verifiable();
 
-            var pointService = new PointService(_mapper, _mockedPointrRepository.Object);
+            var pointService = new PointService(_mapper, _mockedPointRepository.Object);
 
 
             //Act
@@ -250,11 +183,11 @@ namespace SquaresApp.Application.Tests
 
 
             //Assert   
-            _mockedPointrRepository.Verify(obj => obj.AddPointAsync(It.IsAny<Point>()), Times.Never());
+            _mockedPointRepository.Verify(obj => obj.AddAllPointsAsync(It.IsAny<long>(), It.IsAny<IEnumerable<Point>>()), Times.Once());
             Assert.NotNull(result.getPointDTOs);
-            Assert.True(result.getPointDTOs.Count() > 0);
+            Assert.True(result.getPointDTOs.Any());
             Assert.Empty(result.errorMessage);
-            Assert.Equal(result.errorMessage, expectedResult.Item2);
+            Assert.Equal(result.errorMessage, expectedResult.errorMessage);
 
         }
 

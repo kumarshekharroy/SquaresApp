@@ -36,22 +36,24 @@
 
 1. Seed data for User and Points are included in the migration. So, The migration will by default create two users `User_1: {username:"Admin",password:"Admin"}, User_2: {username:"User",password:"User"}` and their respective few records in Points table.
  
-2. TTL of JWT tokens (fresh) and JWT signing key/secret can be changed from `appsettings.{Development/Production}.json` file.
+2. Different environments like `Development` and `Prodution` are supported. e.g. Development Env. specific settings can be modified or overridden by `appsettings.Development.json` . 
 
-3. All the layers of the project are Unit tested by using `Xunit` framework.
+3. The application is using serilog to log each and every request and their response and exception if there is any on console and in file inside `SquaresApp\SquaresApp/SquaresApp.API\bin\{Debug/Release}\net5.0` `Logs` folder. The log level, log path etc. can be changed by modifying serilog section of `appsettings.json` or `appsettings.{Development/Production}.json` file. 
 
-4. Different environments like `Development` and `Prodution` are supported. e.g. Development Env. specific settings can be modified or overridden by `appsettings.Development.json` . 
+4. TTL of JWT tokens (fresh) and JWT signing key/secret can be changed from `appsettings.{Development/Production}.json` file.
 
-5. An username is unique in the system. Hence a new user with already taken username cann't be created/registered again.
+5. All the layers of the project are Unit tested by using `Xunit` framework.
 
-6. `SHA256` hashing algorithm is used to securely store user password in the database. 
+6. An username is unique in the system. Hence a new user with already taken username cann't be created/registered again.
+
+7. `SHA256` hashing algorithm is used to securely store user password in the database. 
  
-7. Register and Login are open endpoints. Hence no jwt token is required in call to these endpoints.
+8. Register and Login are open endpoints. Hence no jwt token is required in call to these endpoints.
 
-8. `Custom Distributed(using redis)/InMemory(as fallback to distributed)` caching is implemented to improve  performance, scalability and lower the response time. 
+9. `Custom Distributed(using redis)/InMemory(as fallback to distributed)` caching is implemented to improve  performance, scalability and lower the response time. 
 
-9. `SlidingExpirationTime` and `AbsoluteExpirationTime` for the cache can be changed from `CacheConfig` section of `appsettings.{Development/Production}.json` file. Set these values to `0` to disable caching.
+10. `SlidingExpirationTime` and `AbsoluteExpirationTime` for the cache can be changed from `CacheConfig` section of `appsettings.{Development/Production}.json` file. Set these values to `0` to disable caching.
 
-10. To make the caching distributed set a valid Redis connection string in `ConnString` field present in the `RedisConfig` section of `appsettings.{Development/Production}.json` file. Leave the field empty/blank to continue with InMemory caching.
+11. To make the caching distributed set a valid Redis connection string in `ConnString` field present in the `RedisConfig` section of `appsettings.{Development/Production}.json` file. Leave the field empty/blank to continue with InMemory caching.
 
-11. `/Point/ImportFromCSV` endpoint expect points in csv file format. A sample CSV file (`points-import-sample.csv`) for the same has been included in the root of the repository. 
+12. `/Points/Import` endpoint expect points in csv file format. A sample CSV file (`points-import-sample.csv`) for the same has been included in the root directory of the repository. 

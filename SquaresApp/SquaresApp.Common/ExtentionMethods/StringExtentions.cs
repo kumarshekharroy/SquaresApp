@@ -5,7 +5,7 @@ namespace SquaresApp.Common.ExtentionMethods
     public static class StringExtentions
     {
         /// <summary>
-        /// extention method over string. returns SHA256 lowecased hash of the string
+        /// extention method over string. returns SHA256 lowercased hash of the string
         /// </summary>
         /// <param name="stringToBeEncrypted"></param>
         /// <param name="trimLR"></param>

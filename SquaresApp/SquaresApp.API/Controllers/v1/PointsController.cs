@@ -16,60 +16,26 @@ namespace SquaresApp.API.Controllers.v1
     [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
-    public class PointController : ControllerBase
+    public class PointsController : ControllerBase
     {
 
         private readonly IPointService _pointService;
-        public PointController(IPointService pointService)
+        public PointsController(IPointService pointService)
         {
             _pointService = pointService;
-        } 
-
-        /// <summary>
-        /// Add a new point.
-        /// </summary>
-        /// <remarks>
-        /// Provide unique coordinates for successful addition.
-        /// </remarks>
-        /// <param name="pointDTO">It is an object consists of X and Y fields. </param> 
-        /// <returns>Returns HttpResponse with added point's detail on successful addition and error message when failed. </returns> 
-        /// <response code="200">Successfully added</response>
-        /// <response code="400">Validation failure</response> 
-        [HttpPost("")]
-        [ProducesResponseType(typeof(Response<GetPointDTO>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(Response<string>), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Add([FromBody] PointDTO pointDTO)
-        {
-            if (pointDTO is null)
-            {
-                return StatusCode(StatusCodes.Status400BadRequest, new Response<string> { Message = "Invalid point payload." });
-            }
-
-            var userId = User.GetUserId();
-
-            var result = await _pointService.AddPointAsync(userId, pointDTO);
-
-
-            if (string.IsNullOrWhiteSpace(result.errorMessage))
-            {
-                return StatusCode(StatusCodes.Status200OK, new Response<GetPointDTO> { IsSuccess = true, Message = "Successfully added.", Data = result.getPointDTO });
-            }
-
-            return StatusCode(StatusCodes.Status400BadRequest, new Response<string> { Message = result.errorMessage });
-
         }
 
         /// <summary>
-        /// Import new points from body.
+        /// Add new points to an existing list.
         /// </summary>
         /// <remarks>
-        /// Provide unique coordinates on successful addition.
+        /// Return list of points along with their database Id on successful addition.
         /// </remarks>
-        /// <param name="pointDTOs">It is a list of object consists of X and Y fields. </param> 
-        /// <returns>Returns HttpResponse with added points list on successful addition and error message when failed. </returns> 
+        /// <param name="pointDTOs">It is a list of points. A point consists of X and Y fields. </param> 
+        /// <returns>Returns success response with list of added points on successful addition and error response with error message when failed. </returns> 
         /// <response code="200">Successfully added</response>
         /// <response code="400">Validation failure</response> 
-        [HttpPost("ImportFromBody")]
+        [HttpPost("")]
         [ProducesResponseType(typeof(Response<IEnumerable<GetPointDTO>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Response<string>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Import([FromBody] IEnumerable<PointDTO> pointDTOs)
@@ -95,15 +61,15 @@ namespace SquaresApp.API.Controllers.v1
         }
 
         /// <summary>
-        /// Import new points from CSV file.
+        /// Import new points from CSV file and add them to an existing list.
         /// </summary>
         /// <remarks>
-        /// Provide unique coordinates on successful addition.
+        /// Return list of points along with their database Id on successful addition.
         /// </remarks> 
-        /// <returns>Returns HttpResponse with added points list on successful addition and error message when failed. </returns> 
+        /// <returns>Returns success response with list of added points on successful addition and error response with error message when failed. </returns> 
         /// <response code="200">Successfully added</response>
         /// <response code="400">Validation failure</response> 
-        [HttpPost("ImportFromCSV")]
+        [HttpPost("Import")]
         [ProducesResponseType(typeof(Response<IEnumerable<GetPointDTO>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Response<string>), StatusCodes.Status400BadRequest)]
         [FileUploadOperation.FileContentType]
@@ -114,28 +80,28 @@ namespace SquaresApp.API.Controllers.v1
             var file = Request?.Form?.Files[0];
             if (file?.Length > 0)
             {
-                using (var reader = new StreamReader(file.OpenReadStream()))
+                using var reader = new StreamReader(file.OpenReadStream());
+                
+                while (reader.Peek() >= 0)
                 {
-                    while (reader.Peek() >= 0)
-                    {
-                        var csv = reader.ReadLine().Replace("\"", string.Empty).Split(",");
+                    var csv = reader.ReadLine().Replace("\"", string.Empty).Split(",");
 
-                        if (csv.Count() == 2 && int.TryParse(csv[0], out var x) && int.TryParse(csv[1], out var y))
-                        {
-                            pointDTOs.Add(new PointDTO { X = x, Y = y });
-                        }
+                    if (csv.Length == 2 && int.TryParse(csv[0], out var x) && int.TryParse(csv[1], out var y))
+                    {
+                        pointDTOs.Add(new PointDTO { X = x, Y = y });
                     }
                 }
+
             }
             else
             {
                 return StatusCode(StatusCodes.Status400BadRequest, new Response<string> { Message = "Invalid file." });
-            } 
+            }
 
             var userId = User.GetUserId();
 
             var result = await _pointService.AddAllPointsAsync(userId, pointDTOs);
-             
+
             if (string.IsNullOrWhiteSpace(result.errorMessage))
             {
                 return StatusCode(StatusCodes.Status200OK, new Response<IEnumerable<GetPointDTO>> { IsSuccess = true, Message = "Successfully imported.", Data = result.getPointDTOs });
@@ -149,7 +115,7 @@ namespace SquaresApp.API.Controllers.v1
         /// Get all existing points.
         /// </summary>
         /// <remarks>
-        /// Returns list of all points
+        /// Return list of all existing points.
         /// </remarks> 
         /// <response code="200">Success</response> 
         [HttpGet("")]
@@ -169,23 +135,23 @@ namespace SquaresApp.API.Controllers.v1
         /// <remarks>
         /// Provide a valid point id for successful deletion.
         /// </remarks>
-        /// <param name="pointId">It is id of an existing point. </param> 
-        /// <returns>Returns HttpResponse with success response on successful addition and error response when failed. </returns> 
+        /// <param name="PointId">It is database id of an existing point. </param> 
+        /// <returns>Returns success response on successful deletion and error response with error message when failed.</returns> 
         /// <response code="200">Successfully added</response>
         /// <response code="400">Validation failure</response> 
-        [HttpDelete("{pointId}")]
+        [HttpDelete("{PointId}")]
         [ProducesResponseType(typeof(Response<string>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Response<string>), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Delete([FromRoute] long pointId)
+        public async Task<IActionResult> Delete([FromRoute] long PointId)
         {
-            if (pointId <= 0)
+            if (PointId <= 0)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, new Response<string> { Message = "Invalid point id." });
             }
 
             var userId = User.GetUserId();
 
-            var result = await _pointService.DeletePointAsync(userId, pointId);
+            var result = await _pointService.DeletePointAsync(userId, PointId);
 
 
             if (string.IsNullOrWhiteSpace(result.errorMessage))

@@ -16,16 +16,11 @@ namespace SquaresApp.API.Tests
 {
     public class UserControllerTests
     {
-
-        private readonly IMapper _mapper;
+         
         private readonly Mock<IUserService> _mockedUserService;
         private readonly AppSettings _appSettings;
         public UserControllerTests()
-        {
-            var autoMapperProfiles = new AutoMapperProfiles();
-            var configuration = new MapperConfiguration(cfg => cfg.AddProfile(autoMapperProfiles));
-            _mapper = new Mapper(configuration);
-
+        {  
             _mockedUserService = new Mock<IUserService>();
             _appSettings = new AppSettings() { JWTConfig = new JWTConfig { Secret = StringHelper.GenerateRandomString(length: 150) } };
 
@@ -42,7 +37,7 @@ namespace SquaresApp.API.Tests
             //Arrange   
             var payload = default(UserDTO);
             const string expectedErrorMessage = "Invalid registration payload.";
-            var userController = new UserController(_mockedUserService.Object, _appSettings, _mapper);
+            var userController = new UserController(_mockedUserService.Object, _appSettings);
 
 
             //Act
@@ -71,7 +66,7 @@ namespace SquaresApp.API.Tests
             var payload = new UserDTO() { Username = StringHelper.GenerateRandomString(length: 10), Password = StringHelper.GenerateRandomString(length: 10) };
             var returnData = (default(GetUserDTO), "Failed due to some reason");
             _mockedUserService.Setup(obj => obj.AddUserAsync(It.IsAny<UserDTO>())).ReturnsAsync(returnData).Verifiable();
-            var userController = new UserController(_mockedUserService.Object, _appSettings, _mapper);
+            var userController = new UserController(_mockedUserService.Object, _appSettings);
 
 
             //Act
@@ -91,7 +86,7 @@ namespace SquaresApp.API.Tests
 
 
         /// <summary>
-        /// Registration Method Test for successfull registration
+        /// Registration Method Test for successful registration
         /// </summary>
         /// <returns></returns>
         [Fact]
@@ -101,7 +96,7 @@ namespace SquaresApp.API.Tests
             var payload = new UserDTO() { Username = StringHelper.GenerateRandomString(length: 10), Password = StringHelper.GenerateRandomString(length: 10) };
             var returnData = (new GetUserDTO { Id = 1 }, string.Empty);
             _mockedUserService.Setup(obj => obj.AddUserAsync(It.IsAny<UserDTO>())).ReturnsAsync(returnData).Verifiable();
-            var userController = new UserController(_mockedUserService.Object, _appSettings, _mapper);
+            var userController = new UserController(_mockedUserService.Object, _appSettings);
 
 
             //Act
@@ -130,7 +125,7 @@ namespace SquaresApp.API.Tests
             //Arrange   
             var payload = default(UserDTO);
             const string expectedErrorMessage = "Invalid authentication payload.";
-            var userController = new UserController(_mockedUserService.Object, _appSettings, _mapper);
+            var userController = new UserController(_mockedUserService.Object, _appSettings);
 
 
             //Act
@@ -159,7 +154,7 @@ namespace SquaresApp.API.Tests
             var payload = new UserDTO() { Username = StringHelper.GenerateRandomString(length: 10), Password = StringHelper.GenerateRandomString(length: 10) };
             var returnData = (default(GetUserDTO), "Failed due to some reason");
             _mockedUserService.Setup(obj => obj.GetUserAsync(It.IsAny<UserDTO>())).ReturnsAsync(returnData).Verifiable();
-            var userController = new UserController(_mockedUserService.Object, _appSettings, _mapper);
+            var userController = new UserController(_mockedUserService.Object, _appSettings);
 
 
             //Act
@@ -190,7 +185,7 @@ namespace SquaresApp.API.Tests
             var returnData = (new GetUserDTO { Id = 1, Username = StringHelper.GenerateRandomString(length: 10) }, string.Empty);
             _mockedUserService.Setup(obj => obj.GetUserAsync(It.IsAny<UserDTO>())).ReturnsAsync(returnData).Verifiable();
             var appSettingWithNoJwtSecret = new AppSettings();
-            var userController = new UserController(_mockedUserService.Object, appSettingWithNoJwtSecret, _mapper);
+            var userController = new UserController(_mockedUserService.Object, appSettingWithNoJwtSecret);
 
 
             //Act
@@ -220,7 +215,7 @@ namespace SquaresApp.API.Tests
             var returnData = (new GetUserDTO { Id = 1, Username = StringHelper.GenerateRandomString(length: 10) }, string.Empty);
             const string expectedMessage = "Authentication successful.";
             _mockedUserService.Setup(obj => obj.GetUserAsync(It.IsAny<UserDTO>())).ReturnsAsync(returnData).Verifiable();
-            var userController = new UserController(_mockedUserService.Object, _appSettings, _mapper);
+            var userController = new UserController(_mockedUserService.Object, _appSettings);
 
 
             //Act

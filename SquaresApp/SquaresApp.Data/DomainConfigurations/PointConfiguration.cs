@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SquaresApp.Domain.Models;
+using SquaresApp.Data.Models;
 
 namespace SquaresApp.Data.DomainConfigurations
 {
@@ -18,8 +18,8 @@ namespace SquaresApp.Data.DomainConfigurations
             builder.Property(prop => prop.Id).ValueGeneratedOnAdd().IsRequired();
 
 
-            builder.HasIndex(prop => prop.UserId).HasDatabaseName("TDX_Point_UserId");//To insure fast retrival of points for a specific user
-            builder.HasIndex(prop => new { prop.UserId, prop.X, prop.Y }).IsUnique().HasDatabaseName("TDX_Point_UserId_X_Y"); //To insure uniqueness of points per user. Also helpful in order by coordinate queries.
+            builder.HasIndex(prop => prop.UserId).HasDatabaseName("IDX_Point_UserId");//To insure fast retrieval of points for a specific user
+            builder.HasIndex(prop => new { prop.UserId, prop.X, prop.Y }).IsUnique().HasDatabaseName("IDX_Point_UserId_X_Y"); //To insure uniqueness of points per user. Also helpful in order by coordinate queries.
 
             builder.Property(prop => prop.UserId).IsRequired();
             builder.Property(prop => prop.X).IsRequired();

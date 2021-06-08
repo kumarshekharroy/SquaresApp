@@ -16,10 +16,10 @@ namespace SquaresApp.API.Controllers.v1
     [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
-    public class SquareController : ControllerBase
+    public class SquaresController : ControllerBase
     {
         private readonly ISquaresService _squaresService; 
-        public SquareController(ISquaresService squaresService)
+        public SquaresController(ISquaresService squaresService)
         { 
             _squaresService = squaresService; 
         }

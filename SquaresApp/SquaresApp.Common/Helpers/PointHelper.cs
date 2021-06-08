@@ -2,7 +2,7 @@
 
 namespace SquaresApp.Common.Helpers
 {
-    public class PointHelper
+    public static class PointHelper
     {
         public static (GetPointDTO b, GetPointDTO d) GetRemainingPoints(GetPointDTO a, GetPointDTO c)
         {

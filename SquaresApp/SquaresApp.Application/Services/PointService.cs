@@ -2,8 +2,8 @@
 using SquaresApp.Application.IServices;
 using SquaresApp.Common.Constants;
 using SquaresApp.Common.DTOs;
-using SquaresApp.Domain.IRepositories;
-using SquaresApp.Domain.Models;
+using SquaresApp.Data.IRepositories;
+using SquaresApp.Data.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,40 +43,14 @@ namespace SquaresApp.Application.Services
 
             if (!string.IsNullOrWhiteSpace(result.errorMessage))
             {
-                return (getPointDTOs: default, errorMessage: result.errorMessage);
+                return (getPointDTOs: default, result.errorMessage);
             }
 
             var getPointDTOs = _mapper.Map<IEnumerable<GetPointDTO>>(result.points);
 
             return (getPointDTOs: getPointDTOs, errorMessage: result.errorMessage);
 
-        }
-
-        /// <summary>
-        /// add a new point in existing list of points
-        /// </summary>
-        /// <param name="userId"></param> 
-        /// <param name="pointDTO"></param> 
-        /// <returns></returns>
-        public async Task<(GetPointDTO getPointDTO, string errorMessage)> AddPointAsync(long userId, PointDTO pointDTO)
-        {
-            var point = _mapper.Map<Point>(pointDTO, opt =>
-            {
-                opt.Items[ConstantValues.UserId] = userId;
-            });
-
-            var result = await _pointRepository.AddPointAsync(point);
-
-            if (!string.IsNullOrWhiteSpace(result.errorMessage))
-            {
-                return (getPointDTO: default, errorMessage: result.errorMessage);
-            }
-
-            var getPointDTO = _mapper.Map<GetPointDTO>(result.point);
-
-            return (getPointDTO: getPointDTO, errorMessage: result.errorMessage);
-
-        }
+        } 
 
         /// <summary>
         /// delete a point from existing list of points

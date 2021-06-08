@@ -2,8 +2,8 @@ using Moq;
 using SquaresApp.Application.Services;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Common.Helpers;
-using SquaresApp.Domain.IRepositories;
-using SquaresApp.Domain.Models;
+using SquaresApp.Data.IRepositories;
+using SquaresApp.Data.Models;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -28,7 +28,7 @@ namespace SquaresApp.Application.Tests
 
             //Arrange   
             var userDTO = new UserDTO() { Username = default, Password = StringHelper.GenerateRandomString(length: 10) };
-            var expectedResult = (default(GetUserDTO), "Invalid username.");
+            var expectedResult = (default(GetUserDTO), errorMessage: "Invalid username.");
 
             _mockedUserRepository.Setup(obj => obj.AddUserAsync(It.IsAny<User>())).ReturnsAsync((default(User), string.Empty)).Verifiable();
 
@@ -43,7 +43,7 @@ namespace SquaresApp.Application.Tests
             _mockedUserRepository.Verify(obj => obj.AddUserAsync(It.IsAny<User>()), Times.Never());
             Assert.Null(result.getUserDTO);
             Assert.NotNull(result.errorMessage);
-            Assert.Equal(result.errorMessage, expectedResult.Item2);
+            Assert.Equal(result.errorMessage, expectedResult.errorMessage);
 
         }
 
@@ -57,7 +57,7 @@ namespace SquaresApp.Application.Tests
 
             //Arrange   
             var userDTO = new UserDTO() { Username = StringHelper.GenerateRandomString(length: 10), Password = default };
-            var expectedResult = (default(GetUserDTO), "Invalid password.");
+            var expectedResult = (default(GetUserDTO), errorMessage: "Invalid password.");
 
             _mockedUserRepository.Setup(obj => obj.AddUserAsync(It.IsAny<User>())).ReturnsAsync((default(User), string.Empty)).Verifiable();
 
@@ -72,7 +72,7 @@ namespace SquaresApp.Application.Tests
             _mockedUserRepository.Verify(obj => obj.AddUserAsync(It.IsAny<User>()), Times.Never());
             Assert.Null(result.getUserDTO);
             Assert.NotNull(result.errorMessage);
-            Assert.Equal(result.errorMessage, expectedResult.Item2);
+            Assert.Equal(result.errorMessage, expectedResult.errorMessage);
 
         }
 
@@ -86,9 +86,9 @@ namespace SquaresApp.Application.Tests
 
             //Arrange   
             var userDTO = new UserDTO() { Username = StringHelper.GenerateRandomString(length: 10), Password = StringHelper.GenerateRandomString(length: 10) };
-            var expectedResult = (default(GetUserDTO), "someError message.");
+            var expectedResult = (default(GetUserDTO), errorMessage: "someError message.");
 
-            _mockedUserRepository.Setup(obj => obj.AddUserAsync(It.IsAny<User>())).ReturnsAsync((default(User), expectedResult.Item2)).Verifiable();
+            _mockedUserRepository.Setup(obj => obj.AddUserAsync(It.IsAny<User>())).ReturnsAsync((default(User), expectedResult.errorMessage)).Verifiable();
 
             var userService = new UserService(_mockedUserRepository.Object, _mapper);
 
@@ -101,7 +101,7 @@ namespace SquaresApp.Application.Tests
             _mockedUserRepository.Verify(obj => obj.AddUserAsync(It.IsAny<User>()), Times.Once());
             Assert.Null(result.getUserDTO);
             Assert.NotNull(result.errorMessage);
-            Assert.Equal(result.errorMessage, expectedResult.Item2);
+            Assert.Equal(result.errorMessage, expectedResult.errorMessage);
 
         }
 
@@ -115,9 +115,9 @@ namespace SquaresApp.Application.Tests
 
             //Arrange   
             var userDTO = new UserDTO() { Username = StringHelper.GenerateRandomString(length: 10), Password = StringHelper.GenerateRandomString(length: 10) };
-            var expectedResult = (new GetUserDTO { Id = 1, Username = userDTO.Username }, string.Empty);
+            var expectedResult = (getUserDto:new GetUserDTO { Id = 1, Username = userDTO.Username }, errorMessage: string.Empty);
 
-            _mockedUserRepository.Setup(obj => obj.AddUserAsync(It.IsAny<User>())).ReturnsAsync((new User { Id = expectedResult.Item1.Id, Username = expectedResult.Item1.Username }, expectedResult.Item2)).Verifiable();
+            _mockedUserRepository.Setup(obj => obj.AddUserAsync(It.IsAny<User>())).ReturnsAsync((new User { Id = expectedResult.getUserDto.Id, Username = expectedResult.getUserDto.Username }, expectedResult.errorMessage)).Verifiable();
 
             var userService = new UserService(_mockedUserRepository.Object, _mapper);
 
@@ -130,9 +130,9 @@ namespace SquaresApp.Application.Tests
             _mockedUserRepository.Verify(obj => obj.AddUserAsync(It.IsAny<User>()), Times.Once());
             Assert.NotNull(result.getUserDTO);
             Assert.Empty(result.errorMessage);
-            Assert.Equal(result.errorMessage, expectedResult.Item2);
-            Assert.Equal(result.getUserDTO.Id, expectedResult.Item1.Id);
-            Assert.Equal(result.getUserDTO.Username, expectedResult.Item1.Username);
+            Assert.Equal(result.errorMessage, expectedResult.errorMessage);
+            Assert.Equal(result.getUserDTO.Id, expectedResult.getUserDto.Id);
+            Assert.Equal(result.getUserDTO.Username, expectedResult.getUserDto.Username);
 
         }
 
@@ -150,7 +150,7 @@ namespace SquaresApp.Application.Tests
 
             //Arrange   
             var userDTO = new UserDTO() { Username = default, Password = StringHelper.GenerateRandomString(length: 10) };
-            var expectedResult = (default(GetUserDTO), "Invalid username.");
+            var expectedResult = (default(GetUserDTO), errorMessage: "Invalid username.");
 
             _mockedUserRepository.Setup(obj => obj.GetUserAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((default(User), string.Empty)).Verifiable();
 
@@ -165,7 +165,7 @@ namespace SquaresApp.Application.Tests
             _mockedUserRepository.Verify(obj => obj.GetUserAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
             Assert.Null(result.getUserDTO);
             Assert.NotNull(result.errorMessage);
-            Assert.Equal(result.errorMessage, expectedResult.Item2);
+            Assert.Equal(result.errorMessage, expectedResult.errorMessage);
 
         }
 
@@ -179,7 +179,7 @@ namespace SquaresApp.Application.Tests
 
             //Arrange   
             var userDTO = new UserDTO() { Username = StringHelper.GenerateRandomString(length: 10), Password = default };
-            var expectedResult = (default(GetUserDTO), "Invalid password.");
+            var expectedResult = (default(GetUserDTO), errorMessage: "Invalid password.");
 
             _mockedUserRepository.Setup(obj => obj.GetUserAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((default(User), string.Empty)).Verifiable();
 
@@ -194,7 +194,7 @@ namespace SquaresApp.Application.Tests
             _mockedUserRepository.Verify(obj => obj.GetUserAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
             Assert.Null(result.getUserDTO);
             Assert.NotNull(result.errorMessage);
-            Assert.Equal(result.errorMessage, expectedResult.Item2);
+            Assert.Equal(result.errorMessage, expectedResult.errorMessage);
 
         }
 
@@ -208,9 +208,9 @@ namespace SquaresApp.Application.Tests
 
             //Arrange   
             var userDTO = new UserDTO() { Username = StringHelper.GenerateRandomString(length: 10), Password = StringHelper.GenerateRandomString(length: 10) };
-            var expectedResult = (default(GetUserDTO), "someError message.");
+            var expectedResult = (default(GetUserDTO), errorMessage:"someError message.");
 
-            _mockedUserRepository.Setup(obj => obj.GetUserAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((default(User), expectedResult.Item2)).Verifiable();
+            _mockedUserRepository.Setup(obj => obj.GetUserAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((default(User), expectedResult.errorMessage)).Verifiable();
 
             var userService = new UserService(_mockedUserRepository.Object, _mapper);
 
@@ -223,7 +223,7 @@ namespace SquaresApp.Application.Tests
             _mockedUserRepository.Verify(obj => obj.GetUserAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once());
             Assert.Null(result.getUserDTO);
             Assert.NotNull(result.errorMessage);
-            Assert.Equal(result.errorMessage, expectedResult.Item2);
+            Assert.Equal(result.errorMessage, expectedResult.errorMessage);
 
         }
 
@@ -237,9 +237,9 @@ namespace SquaresApp.Application.Tests
 
             //Arrange   
             var userDTO = new UserDTO() { Username = StringHelper.GenerateRandomString(length: 10), Password = StringHelper.GenerateRandomString(length: 10) };
-            var expectedResult = (new GetUserDTO { Id = 1, Username = userDTO.Username }, string.Empty);
+            var expectedResult = (getUserDto:new GetUserDTO { Id = 1, Username = userDTO.Username }, errorMessage: string.Empty);
 
-            _mockedUserRepository.Setup(obj => obj.GetUserAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((new User { Id = expectedResult.Item1.Id, Username = expectedResult.Item1.Username }, expectedResult.Item2)).Verifiable();
+            _mockedUserRepository.Setup(obj => obj.GetUserAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((new User { Id = expectedResult.getUserDto.Id, Username = expectedResult.getUserDto.Username }, expectedResult.errorMessage)).Verifiable();
 
             var userService = new UserService(_mockedUserRepository.Object, _mapper);
 
@@ -252,9 +252,9 @@ namespace SquaresApp.Application.Tests
             _mockedUserRepository.Verify(obj => obj.GetUserAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once());
             Assert.NotNull(result.getUserDTO);
             Assert.Empty(result.errorMessage);
-            Assert.Equal(result.errorMessage, expectedResult.Item2);
-            Assert.Equal(result.getUserDTO.Id, expectedResult.Item1.Id);
-            Assert.Equal(result.getUserDTO.Username, expectedResult.Item1.Username);
+            Assert.Equal(result.errorMessage, expectedResult.errorMessage);
+            Assert.Equal(result.getUserDTO.Id, expectedResult.getUserDto.Id);
+            Assert.Equal(result.getUserDTO.Username, expectedResult.getUserDto.Username);
 
         }
     }

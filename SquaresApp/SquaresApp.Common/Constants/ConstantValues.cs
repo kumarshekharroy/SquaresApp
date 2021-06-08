@@ -3,12 +3,12 @@
     /// <summary>
     /// Constant values to be used in the project
     /// </summary>
-    public class ConstantValues
+    public static class ConstantValues
     {
         public const string DbConnString = "DbConnString";
         public const string AppSettings = "AppSettings";
         public const string Authorization = "Authorization";
-        public const string BearerTokenDiscription = @"Enter the JWT token in the text input below. Example: 'aValidJWTtoken'";
+        public const string BearerTokenDescription = @"Enter the JWT token in the text input below. Example: 'aValidJWTtoken'";
         public const string JWTSecretPath = "AppSettings:JWTConfig:Secret";
         public const string ContentLocation = "Content-Location";
         public const string UnexpectedErrorMessage = "Some unexpected error occurred. Please try again after sometime with a valid payload.";
@@ -22,6 +22,10 @@
         public const string Bearer = "Bearer";
         public const string JWT = "JWT";
         public const string RedisConnString = "AppSettings:CacheConfig:RedisConfig:ConnString";
+        public const string CorrelationIdHeader = "CorrelationId";
+        public const string CorrelationIDHeaderDescription = "Correlation Id for the request";
+        public const string SourceContext = "SourceContext";
+        public const string UTCTimestamp = "UTCTimestamp";
 
     }
 }

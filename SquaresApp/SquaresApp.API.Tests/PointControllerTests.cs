@@ -6,6 +6,7 @@ using SquaresApp.API.Controllers.v1;
 using SquaresApp.Application.IServices;
 using SquaresApp.Common.DTOs;
 using SquaresApp.Common.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,101 +26,6 @@ namespace SquaresApp.API.Tests
         }
 
 
-        /// <summary>
-        /// Add Point Method Test when Null Payload
-        /// </summary>
-        /// <returns></returns>
-        [Fact]
-        public async Task AddPointTest_NullPayload()
-        {
-            //Arrange
-            var payload = default(PointDTO);
-            var returnData = (default(GetPointDTO), string.Empty);
-            const string expectedErrorMessage = "Invalid point payload.";
-            _mockedPointService.Setup(obj => obj.AddPointAsync(It.IsAny<long>(), It.IsAny<PointDTO>())).ReturnsAsync(returnData).Verifiable();
-
-            var pointController = new PointController(_mockedPointService.Object);
-
-            //Act
-            var result = await pointController.Add(payload);
-            var objectResult = result as ObjectResult;
-
-
-            //Assert    
-            _mockedPointService.Verify(obj => obj.AddPointAsync(It.IsAny<long>(), It.IsAny<PointDTO>()), Times.Never());
-            Assert.NotNull(objectResult);
-            Assert.Equal(StatusCodes.Status400BadRequest, objectResult.StatusCode);
-
-            Assert.False((objectResult.Value as Response<string>)?.IsSuccess);
-            Assert.Null((objectResult.Value as Response<string>)?.Data);
-            Assert.NotNull((objectResult.Value as Response<string>)?.Message);
-            Assert.Equal((objectResult.Value as Response<string>)?.Message, expectedErrorMessage);
-        }
-
-        /// <summary>
-        /// Add Point Method Test when Payload is not null but invalid
-        /// </summary>
-        /// <returns></returns>
-        [Fact]
-        public async Task AddPointTest_NotNullButInvalidPayload()
-        {
-            //Arrange    
-            var payload = new PointDTO { };
-            var returnData = (default(GetPointDTO), "Some Error message");
-            _mockedPointService.Setup(obj => obj.AddPointAsync(It.IsAny<long>(), It.IsAny<PointDTO>())).ReturnsAsync(returnData).Verifiable();
-
-            var pointController = new PointController(_mockedPointService.Object);
-            pointController.ControllerContext = _controllerContext;
-
-            //Act
-            var result = await pointController.Add(payload);
-            var objectResult = result as ObjectResult;
-
-
-            //Assert    
-            _mockedPointService.Verify(obj => obj.AddPointAsync(It.IsAny<long>(), It.IsAny<PointDTO>()), Times.Once());
-            Assert.NotNull(objectResult);
-            Assert.Equal(StatusCodes.Status400BadRequest, objectResult.StatusCode);
-
-            Assert.False((objectResult.Value as Response<string>)?.IsSuccess);
-            Assert.Null((objectResult.Value as Response<string>)?.Data);
-            Assert.NotNull((objectResult.Value as Response<string>)?.Message);
-            Assert.Equal((objectResult.Value as Response<string>)?.Message, returnData.Item2);
-        }
-
-
-        /// <summary>
-        /// Add Point Method Test when all good
-        /// </summary>
-        /// <returns></returns>
-        [Fact]
-        public async Task AddPointTest_Successful()
-        {
-            //Arrange    
-            var payload = new PointDTO { X = 1, Y = 2 };
-            const string expectedMessage = "Successfully added.";
-            var returnData = (new GetPointDTO { Id = 1 }, string.Empty);
-            _mockedPointService.Setup(obj => obj.AddPointAsync(It.IsAny<long>(), It.IsAny<PointDTO>())).ReturnsAsync(returnData).Verifiable();
-
-            var pointController = new PointController(_mockedPointService.Object);
-            pointController.ControllerContext = _controllerContext;
-
-            //Act
-            var result = await pointController.Add(payload);
-            var objectResult = result as ObjectResult;
-
-
-            //Assert    
-            _mockedPointService.Verify(obj => obj.AddPointAsync(It.IsAny<long>(), It.IsAny<PointDTO>()), Times.Once());
-            Assert.NotNull(objectResult);
-            Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
-
-            Assert.True((objectResult.Value as Response<GetPointDTO>)?.IsSuccess);
-            Assert.NotNull((objectResult.Value as Response<GetPointDTO>)?.Data);
-            Assert.Equal((objectResult.Value as Response<GetPointDTO>)?.Data.Id, returnData.Item1.Id);
-            Assert.NotNull((objectResult.Value as Response<GetPointDTO>)?.Message);
-            Assert.Equal((objectResult.Value as Response<GetPointDTO>)?.Message, expectedMessage);
-        }
 
         /// <summary>
         /// Get all Points Method Test when all good
@@ -130,10 +36,10 @@ namespace SquaresApp.API.Tests
         {
             //Arrange     
             const string expectedMessage = "Successfully fetched.";
-            var returnData = new GetPointDTO[] { };
+            var returnData = Array.Empty<GetPointDTO>();
             _mockedPointService.Setup(obj => obj.GetAllPointsAsync(It.IsAny<long>())).ReturnsAsync(returnData).Verifiable();
 
-            var pointController = new PointController(_mockedPointService.Object);
+            var pointController = new PointsController(_mockedPointService.Object);
             pointController.ControllerContext = _controllerContext;
 
             //Act
@@ -167,7 +73,7 @@ namespace SquaresApp.API.Tests
             const string expectedErrorMessage = "Invalid point id.";
             _mockedPointService.Setup(obj => obj.DeletePointAsync(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(returnData).Verifiable();
 
-            var pointController = new PointController(_mockedPointService.Object);
+            var pointController = new PointsController(_mockedPointService.Object);
 
             //Act
             var result = await pointController.Delete(payload);
@@ -197,7 +103,7 @@ namespace SquaresApp.API.Tests
             var returnData = (default(bool), "Some Error message");
             _mockedPointService.Setup(obj => obj.DeletePointAsync(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(returnData).Verifiable();
 
-            var pointController = new PointController(_mockedPointService.Object);
+            var pointController = new PointsController(_mockedPointService.Object);
             pointController.ControllerContext = _controllerContext;
 
             //Act
@@ -229,7 +135,7 @@ namespace SquaresApp.API.Tests
             const string expectedMessage = "Successfully deleted.";
             _mockedPointService.Setup(obj => obj.DeletePointAsync(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(returnData).Verifiable();
 
-            var pointController = new PointController(_mockedPointService.Object);
+            var pointController = new PointsController(_mockedPointService.Object);
             pointController.ControllerContext = _controllerContext;
 
             //Act
@@ -260,7 +166,7 @@ namespace SquaresApp.API.Tests
             const string expectedErrorMessage = "Invalid payload.";
             _mockedPointService.Setup(obj => obj.AddAllPointsAsync(It.IsAny<long>(), It.IsAny<IEnumerable<PointDTO>>())).Verifiable();
 
-            var pointController = new PointController(_mockedPointService.Object);
+            var pointController = new PointsController(_mockedPointService.Object);
 
             //Act
             var result = await pointController.Import(payload);
@@ -284,14 +190,14 @@ namespace SquaresApp.API.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task ImportPointsFromBodyTest_NotNullPayloadButOtherValiditionFailed()
+        public async Task ImportPointsFromBodyTest_NotNullPayloadButOtherValidationFailed()
         {
             //Arrange
             var payload = Enumerable.Empty<PointDTO>();
             var returnData = (default(IEnumerable<GetPointDTO>), "Some validation failed.");
             _mockedPointService.Setup(obj => obj.AddAllPointsAsync(It.IsAny<long>(), It.IsAny<IEnumerable<PointDTO>>())).ReturnsAsync(returnData).Verifiable();
 
-            var pointController = new PointController(_mockedPointService.Object);
+            var pointController = new PointsController(_mockedPointService.Object);
             pointController.ControllerContext = _controllerContext;
 
 
@@ -324,7 +230,7 @@ namespace SquaresApp.API.Tests
             const string expectedMessage = "Successfully imported.";
             _mockedPointService.Setup(obj => obj.AddAllPointsAsync(It.IsAny<long>(), It.IsAny<IEnumerable<PointDTO>>())).ReturnsAsync(returnData).Verifiable();
 
-            var pointController = new PointController(_mockedPointService.Object);
+            var pointController = new PointsController(_mockedPointService.Object);
             pointController.ControllerContext = _controllerContext;
 
 
@@ -356,7 +262,7 @@ namespace SquaresApp.API.Tests
             const string expectedErrorMessage = "Invalid file.";
             _mockedPointService.Setup(obj => obj.AddAllPointsAsync(It.IsAny<long>(), It.IsAny<IEnumerable<PointDTO>>())).Verifiable();
 
-            var pointController = new PointController(_mockedPointService.Object);
+            var pointController = new PointsController(_mockedPointService.Object);
 
             //Act
             var result = await pointController.ImportFromCSV();
@@ -385,7 +291,7 @@ namespace SquaresApp.API.Tests
             var returnData = (default(IEnumerable<GetPointDTO>), "Some validation failed.");
             _mockedPointService.Setup(obj => obj.AddAllPointsAsync(It.IsAny<long>(), It.IsAny<IEnumerable<PointDTO>>())).ReturnsAsync(returnData).Verifiable();
 
-            var pointController = new PointController(_mockedPointService.Object);
+            var pointController = new PointsController(_mockedPointService.Object);
             _controllerContext.HttpContext.Request.Headers.Add("Content-Type", "multipart/form-data");
             var filecontent = Encoding.UTF8.GetBytes("some invalid content");
             var file = new FormFile(new MemoryStream(filecontent), 0, filecontent.Length, "formData", "dummy.csv");
@@ -421,7 +327,7 @@ namespace SquaresApp.API.Tests
             const string expectedMessage = "Successfully imported.";
             _mockedPointService.Setup(obj => obj.AddAllPointsAsync(It.IsAny<long>(), It.IsAny<IEnumerable<PointDTO>>())).ReturnsAsync(returnData).Verifiable();
 
-            var pointController = new PointController(_mockedPointService.Object);
+            var pointController = new PointsController(_mockedPointService.Object);
             _controllerContext.HttpContext.Request.Headers.Add("Content-Type", "multipart/form-data");
             var filecontent = Encoding.UTF8.GetBytes("12,2\n3,4\n5,6");
             var file = new FormFile(new MemoryStream(filecontent), 0, filecontent.Length, "formData", "dummy.csv");

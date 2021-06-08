@@ -20,7 +20,7 @@ namespace SquaresApp.Common.SwaggerUtils
         {
 
             var isFileUploadOperation =
-                context.MethodInfo.CustomAttributes.Any(a => a.AttributeType == typeof(FileContentType));
+                context.MethodInfo.CustomAttributes.Any(a => a.AttributeType == typeof(FileContentTypeAttribute));
 
             if (!isFileUploadOperation) return;
 
@@ -54,7 +54,7 @@ namespace SquaresApp.Common.SwaggerUtils
         /// Indicates swashbuckle should consider the parameter as a file upload
         /// </summary>
         [AttributeUsage(AttributeTargets.Method)]
-        public class FileContentType : Attribute
+        public class FileContentTypeAttribute : Attribute
         {
 
         }

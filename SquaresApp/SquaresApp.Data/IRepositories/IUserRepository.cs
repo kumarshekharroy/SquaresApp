@@ -1,7 +1,7 @@
-﻿using SquaresApp.Domain.Models;
+﻿using SquaresApp.Data.Models;
 using System.Threading.Tasks;
 
-namespace SquaresApp.Domain.IRepositories
+namespace SquaresApp.Data.IRepositories
 {
     public interface IUserRepository
     {
